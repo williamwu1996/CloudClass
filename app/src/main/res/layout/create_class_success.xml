@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorlightgray"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/class_linear"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/title_bg"
+        >
+
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:text=""
+            android:textSize="17sp"
+            android:background="@drawable/back"
+            android:textColor="@color/colorwhite"
+            android:clickable="true"
+            android:visibility="invisible"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="40dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="创建班课"
+            android:textSize="24sp"
+            android:textColor="@color/colorwhite"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:text="Edit"
+            android:visibility="invisible"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="创建班课成功"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:text="快将班课号告诉学生吧"/>
+
+    <TextView
+        android:id="@+id/create_class_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="25dp"
+        android:textColor="@color/title_bg"
+        android:textSize="30dp"
+        android:text="723739"/>
+
+    <Button
+        android:id="@+id/create_class_finish"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_centerInParent="true"
+        android:text="完成"
+        android:singleLine="true"
+        android:layout_gravity="center_horizontal"
+        android:textSize="17sp" />
+
+
+</LinearLayout>

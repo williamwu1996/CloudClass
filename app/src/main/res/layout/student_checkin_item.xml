@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/student_checkin_history_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2017-04-09 08:08"
+        android:layout_gravity="center_vertical"
+        android:textColor="#000"
+        android:textSize="17dp"/>
+
+    <TextView
+        android:id="@+id/student_checkin_history_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="已签到"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="200dp"/>
+</LinearLayout>

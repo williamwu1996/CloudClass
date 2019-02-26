@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorlightgray"
+    >
+
+    <LinearLayout
+        android:id="@+id/class_linear"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/title_bg"
+        >
+
+        <Button
+            android:id="@+id/join_class_result_cancel"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:text=""
+            android:textSize="17sp"
+            android:background="@drawable/back"
+            android:textColor="@color/colorwhite"
+            android:clickable="true"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="40dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="加入班课"
+            android:textSize="24sp"
+            android:textColor="@color/colorwhite"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:text="Edit"
+            android:visibility="invisible"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/join_class_result_course"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/colorwhite"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        android:textSize="17dp"
+        android:text="课程  操作系统"/>
+
+    <TextView
+        android:id="@+id/join_class_result_class"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/colorwhite"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        android:textSize="17dp"
+        android:text="班级  Java04"/>
+
+    <TextView
+        android:id="@+id/join_class_result_teacher"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/colorwhite"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        android:textSize="17dp"
+        android:text="老师  吴玠璘"/>
+
+    <Button
+        android:id="@+id/join_class_finish"
+        android:layout_width="350dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:clickable="true"
+        android:text="加入" />
+</LinearLayout>

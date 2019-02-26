@@ -1,0 +1,206 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/title_bg"
+        >
+
+        <Button
+            android:id="@+id/resource_upload_pic_back"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:textSize="17sp"
+            android:background="@drawable/back"
+            android:textColor="@color/colorwhite"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_marginLeft="40dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="上传图片"
+            android:textSize="24sp"
+            android:textColor="@color/colorwhite"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:text="Edit"
+            android:visibility="invisible"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/teacher_resource_upload_pic_img"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="25dp"
+        android:clickable="true"
+        android:src="@drawable/timg"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/colorwhite"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="标题"
+            android:layout_marginTop="8dp"
+            android:textSize="17sp" />
+
+        <EditText
+            android:id="@+id/teacher_resource_upload_pic_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@null"
+            android:singleLine="true"
+            android:text="Default Title"
+            />
+    </RelativeLayout>
+
+    <View
+        android:layout_height="1.5dp"
+        android:background="#EFEFEF"
+        android:layout_width="match_parent"/>
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/colorwhite"
+        android:layout_height="40dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="简介"
+            android:layout_marginTop="8dp"
+            android:textSize="17sp" />
+
+        <EditText
+            android:id="@+id/teacher_resource_upload_pic_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@null"
+            android:singleLine="true"
+            android:text="Default profile"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/teacher_resource_upload_pic_upload_and_post"
+        android:layout_width="match_parent"
+        android:background="@color/colorwhite"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="上传并发布"
+            android:layout_marginTop="8dp"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:id="@+id/teacher_resource_upload_pic_upload_and_post_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@null"
+            android:singleLine="true"
+            android:src="@drawable/back"
+            android:visibility="invisible"
+            />
+    </RelativeLayout>
+
+    <View
+        android:layout_height="1.5dp"
+        android:background="#EFEFEF"
+        android:layout_width="match_parent"/>
+
+
+
+    <RelativeLayout
+        android:id="@+id/teacher_resource_upload_pic_upload_not_post"
+        android:layout_width="match_parent"
+        android:background="@color/colorwhite"
+        android:layout_height="40dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="上传但不发布"
+            android:layout_marginTop="8dp"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:id="@+id/teacher_resource_upload_pic_upload_not_post_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@null"
+            android:singleLine="true"
+            android:src="@drawable/back"
+            android:visibility="invisible"
+            />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/colorwhite"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        >
+        <Button
+            android:id="@+id/teacher_resource_upload_pic_upload_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="上传"
+            android:singleLine="true"
+            android:textSize="17sp"
+            android:background="@color/colorwhite"/>
+    </RelativeLayout>
+
+</LinearLayout>

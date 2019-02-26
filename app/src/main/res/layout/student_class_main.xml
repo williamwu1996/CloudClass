@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/student_class_main_linear"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/title_bg"
+        >
+
+        <Button
+            android:id="@+id/student_class_main_back"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:textSize="17sp"
+            android:background="@drawable/back"
+            android:textColor="@color/colorwhite"
+            />
+
+        <TextView
+            android:id="@+id/student_class_title"
+            android:layout_width="0dp"
+            android:layout_marginLeft="40dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="班课"
+            android:textSize="24sp"
+            android:textColor="@color/colorwhite"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:text="Edit"
+            android:visibility="invisible"/>
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/student_class_main_resource_listview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/student_class_main_linear"
+        />
+
+    <LinearLayout
+        android:id="@+id/student_class_main_members_page"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:layout_constraintTop_toBottomOf="@id/student_class_main_linear"
+        android:visibility="invisible"
+        >
+
+        <Button
+            android:id="@+id/student_class_main_members_checkin_btn"
+            android:layout_width="320dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="参与签到"
+            android:clickable="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="所有成员"
+            android:layout_marginTop="18dp"
+            android:textSize="17sp" />
+
+        <ListView
+            android:id="@+id/student_class_main_members_listview"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/student_class_main_detail_page"
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#EFEFEF"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <ImageView
+            android:id="@+id/student_class_main_detail_img"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="25dp"
+            android:clickable="true"
+            android:src="@drawable/timg"/>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:background="@color/colorwhite"
+            android:layout_height="40dp"
+            android:layout_marginTop="30dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:text="班级"
+                android:layout_marginTop="8dp"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/student_class_main_detail_classname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:background="@null"
+                android:singleLine="true"
+                android:text="Java04"
+                />
+        </RelativeLayout>
+
+        <View
+            android:layout_height="1.5dp"
+            android:background="#EFEFEF"
+            android:layout_width="match_parent"/>
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:background="@color/colorwhite"
+            android:layout_height="40dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:text="课程"
+                android:layout_marginTop="8dp"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/student_class_main_detail_coursename"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:background="@null"
+                android:singleLine="true"
+                android:text="数据结构"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_height="1.5dp"
+            android:background="#EFEFEF"
+            android:layout_width="match_parent"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:background="@color/colorwhite"
+            android:layout_height="40dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:text="教师"
+                android:layout_marginTop="8dp"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/student_class_main_detail_teacher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:background="@null"
+                android:singleLine="true"
+                android:text="吴玠璘"/>
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="课程简介"
+            android:layout_marginTop="18dp"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/student_class_main_detail_profile"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorwhite"
+            android:gravity="top"
+            android:text="课程是数据结构啦啦啦"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:background="@color/colorwhite"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            >
+
+
+            <Button
+                android:id="@+id/student_class_main_detail_exit_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="退出班课"
+                android:singleLine="true"
+                android:textSize="17sp"
+                android:background="@color/colorwhite"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/student_class_main_homework_page"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="50dp"
+        android:visibility="invisible"
+        >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="fill_parent"
+                android:layout_height="0dip"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+    </TabHost>
+
+    <TextView
+        android:id="@+id/student_class_main_test_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="60dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/student_class_navigation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="?android:attr/windowBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/student_class_navigation" />
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/colorlightgray">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/title_bg"
+        >
+        <Button
+            android:id="@+id/student_homework_answer_concluded_back"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:textSize="17sp"
+            android:background="@drawable/back"
+            android:textColor="#fff"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_marginLeft="40dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="结果"
+            android:textSize="24sp"
+            android:textColor="@color/colorwhite"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:text="提交"
+            android:textColor="#fff"
+            android:background="@null"
+            android:visibility="invisible"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/student_homework_answer_concluded_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="您的得分：20/30"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"/>
+
+    <View
+        android:layout_height="1.5dp"
+        android:background="#CFCFCF"
+        android:layout_width="match_parent"/>
+
+    <TextView
+        android:id="@+id/student_homework_answer_concluded_question_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="系统模型的建立"
+        android:textSize="15dp"/>
+
+    <TextView
+        android:id="@+id/student_homework_answer_concluded_question_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="选择一个图书管理系统（例如工资管理系统，飞机订票系统，使用SA方法进行分析，给出分析模型）" />
+
+    <TextView
+        android:id="@+id/student_homework_answer_concluded_answer"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="#fff"
+        android:layout_marginTop="5dp"/>
+
+</LinearLayout>

@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/title_bg"
+        >
+
+        <Button
+            android:id="@+id/change_personal_info_back"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:textSize="17sp"
+            android:background="@drawable/back"
+            android:textColor="@color/colorwhite"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_marginLeft="40dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="个人信息"
+            android:textSize="24sp"
+            android:textColor="@color/colorwhite"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:text="Edit"
+            android:visibility="invisible"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/change_personal_info_img"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="25dp"
+        android:clickable="true"
+        android:src="@drawable/timg"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/colorwhite"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="姓名"
+            android:layout_marginTop="8dp"
+            android:textSize="17sp" />
+
+        <EditText
+            android:id="@+id/change_personal_info_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@null"
+            android:singleLine="true"
+            android:text="吴玠璘"
+            />
+    </RelativeLayout>
+
+    <View
+        android:layout_height="1.5dp"
+        android:background="#EFEFEF"
+        android:layout_width="match_parent"/>
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/colorwhite"
+        android:layout_height="40dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="电话"
+            android:layout_marginTop="8dp"
+            android:textSize="17sp" />
+
+        <EditText
+            android:id="@+id/change_personal_info_phoneno"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@null"
+            android:singleLine="true"
+            android:text="15066250205"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_height="1.5dp"
+        android:background="#EFEFEF"
+        android:layout_width="match_parent"/>
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/colorwhite"
+        android:layout_height="40dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="出生年份"
+            android:layout_marginTop="8dp"
+            android:textSize="17sp" />
+
+        <EditText
+            android:id="@+id/change_personal_info_doy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@null"
+            android:singleLine="true"
+            android:text="1996年"/>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="选择性别"
+        android:layout_marginTop="10dp"/>
+
+    <RelativeLayout
+        android:id="@+id/change_personal_info_male"
+        android:layout_width="match_parent"
+        android:background="@color/colorwhite"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="男"
+            android:layout_marginTop="8dp"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:id="@+id/change_personal_info_male_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@null"
+            android:singleLine="true"
+            android:src="@drawable/back"
+            />
+    </RelativeLayout>
+
+    <View
+        android:layout_height="1dp"
+        android:background="#EFEFEF"
+        android:layout_width="match_parent"/>
+
+
+
+    <RelativeLayout
+        android:id="@+id/change_personal_info_female"
+        android:layout_width="match_parent"
+        android:background="@color/colorwhite"
+        android:layout_height="40dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="女"
+            android:layout_marginTop="8dp"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:id="@+id/change_personal_info_female_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@null"
+            android:singleLine="true"
+            android:src="@drawable/back"
+            android:visibility="invisible"
+            />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/colorwhite"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        >
+        <Button
+            android:id="@+id/change_personal_info_save_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="保存"
+            android:singleLine="true"
+            android:textSize="17sp"
+            android:background="@color/colorwhite"/>
+    </RelativeLayout>
+
+</LinearLayout>

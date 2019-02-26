@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.cloudclass">
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainPage"
+            android:label="@string/app_name">
+
+        </activity>
+
+        <activity android:name=".SplashActivity"
+            android:theme="@style/splashTheme">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Forget_email"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Forget_password"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Forget_validation_code"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Register_email"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Register_password"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Register_validation_code"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Join_class_code"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Join_class_result"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Create_class_info"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Create_class_success"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Change_password"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Change_personal_info"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Student_class_main"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Teacher_class_main"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Student_checkin"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Teacher_class_edit_detail"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Student_homework_answer_concluded"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Student_homework_answer_going"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Teacher_resource_upload_pc"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Teacher_resource_upload_pic"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Checkin_main"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Checkin_going"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Checkin_result"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Teacher_edit_homework"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Teacher_homework_check_main"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Teacher_homework_detail"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Teacher_homework_check_detail"
+            android:label="@string/app_name">
+        </activity>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.rain.takephotodemo.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/public_file_path" />
+        </provider>
+    </application>
+
+</manifest>

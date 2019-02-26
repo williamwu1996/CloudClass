@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/teacher_class_main_detail_page"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EFEFEF"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/teacher_class_main_detail_edit_linear"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/title_bg"
+        >
+
+        <Button
+            android:id="@+id/teacher_class_detail_edit_back"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:textSize="17sp"
+            android:background="@drawable/back"
+            android:textColor="@color/colorwhite"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_marginLeft="40dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="编辑班课"
+            android:textSize="24sp"
+            android:textColor="@color/colorwhite"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:text="Edit"
+            android:visibility="invisible"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/teacher_class_main_detail_edit_img"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="25dp"
+        android:clickable="true"
+        android:src="@drawable/timg"/>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/colorwhite"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="班级"
+            android:layout_marginTop="8dp"
+            android:textSize="17sp" />
+
+        <EditText
+            android:id="@+id/teacher_class_main_detail_edit_classname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@null"
+            android:singleLine="true"
+            android:text="Java04"
+            />
+    </RelativeLayout>
+
+    <View
+        android:layout_height="1.5dp"
+        android:background="#EFEFEF"
+        android:layout_width="match_parent"/>
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/colorwhite"
+        android:layout_height="40dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="课程"
+            android:layout_marginTop="8dp"
+            android:textSize="17sp" />
+
+        <EditText
+            android:id="@+id/teacher_class_main_detail_edit_coursename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@null"
+            android:singleLine="true"
+            android:text="数据结构"/>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:text="课程简介"
+        android:layout_marginTop="18dp"
+        android:textSize="17sp" />
+
+    <EditText
+        android:id="@+id/teacher_class_main_detail_edit_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorwhite"
+        android:gravity="top"
+        android:text="课程是数据结构啦啦啦"/>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/colorwhite"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        >
+        <Button
+            android:id="@+id/teacher_class_detail_save_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="保存"
+            android:singleLine="true"
+            android:textSize="17sp"
+            android:background="@color/colorwhite"/>
+    </RelativeLayout>
+
+</LinearLayout>
