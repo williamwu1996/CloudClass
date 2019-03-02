@@ -12,6 +12,14 @@ import com.activity.Forget_email;
 import com.activity.Register_email;
 
 import java.awt.font.TextAttribute;
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class LoginActivity extends Activity {
 
@@ -19,6 +27,8 @@ public class LoginActivity extends Activity {
     private EditText edt_password;
     private TextView register;
     private TextView forget;
+    String userName;
+    String userPwd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,13 +68,54 @@ public class LoginActivity extends Activity {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.btn_login://登录
-                    String userName = edt_username.getText().toString();
-                    String userPwd = edt_password.getText().toString();
-                    UserManage.getInstance().saveUserInfo(LoginActivity.this, userName, userPwd);
-                    Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(LoginActivity.this, MainPage.class);//跳转到主页
-                    startActivity(intent);
-                    finish();
+                    userName = edt_username.getText().toString();
+                    userPwd = edt_password.getText().toString();
+                    System.out.println("username:"+userName);
+                    System.out.println("password"+userPwd);
+                    final String[] status = {""};
+                    String url = "http://192.168.137.1:8079/users/login";
+                    OkHttpClient okHttpClient = new OkHttpClient();
+                    FormBody.Builder formBody = new FormBody.Builder();
+                    formBody.add("email", userName);
+                    formBody.add("password", userPwd);
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .post(formBody.build())
+                            .build();
+                    Call call = okHttpClient.newCall(request);
+                    call.enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            System.out.println("Failed");
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+//                message.setText(response.body().string());
+                            if((response.body().string()).equals("true")){
+                                UserManage.getInstance().saveUserInfo(LoginActivity.this, userName, userPwd);
+//                                Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(LoginActivity.this, MainPage.class);//跳转到主页
+                                startActivity(intent);
+                                finish();
+                            }else{
+                                System.out.println("---------------------");
+                                System.out.println("用户名密码错误");
+                                System.out.println("----------------------");
+                            }
+                        }
+                    });
+//                    if(status[0].equals("true")){
+//                        UserManage.getInstance().saveUserInfo(LoginActivity.this, userName, userPwd);
+//                        Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+//                        Intent intent = new Intent(LoginActivity.this, MainPage.class);//跳转到主页
+//                        startActivity(intent);
+//                        finish();
+//                    }else{
+//                        System.out.println("---------------------");
+//                        System.out.println("用户名密码错误");
+//                        System.out.println("----------------------");
+//                    }
                     break;
             }
 

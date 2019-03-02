@@ -2,7 +2,9 @@ package com.cloudclass;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -46,6 +48,7 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
     TextView title;
     RelativeLayout changepassword;
     RelativeLayout changeinfo;
+    Button exit;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -86,6 +89,7 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main_page);
+        initActivity();
         initClassList();
         initMessageList();
 
@@ -93,6 +97,21 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
         if(actionBar != null){
             actionBar.hide();
         }
+        exit = findViewById(R.id.me_exit_button);
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Context context = getApplicationContext();
+                SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);//Context.MODE_PRIVATE表示SharePrefences的数据只有自己应用程序能访问。
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString("USER_NAME","");
+                editor.putString("PASSWORD","");
+                editor.commit();
+                Intent intent = new Intent(MainPage.this,LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         messageadapter = new MessageAdapter(MainPage.this, R.layout.message_item, messagelist);
         classadapter = new ClassAdapter(MainPage.this,R.layout.class_item, classlist);
@@ -244,6 +263,11 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
         messagelist.add(c);
         MessageMain d = new MessageMain(R.drawable.timg,"Dotnet04","19-1-31 13:28","Williamwu","约吗");
         messagelist.add(d);
+    }
+
+    //参加的班课，消息，个人信息
+    public void initActivity(){
+
     }
 
 }

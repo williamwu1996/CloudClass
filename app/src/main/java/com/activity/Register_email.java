@@ -29,6 +29,7 @@ public class Register_email extends Activity {
                 Intent intent = new Intent(Register_email.this,Register_validation_code.class);
                 intent.putExtra("address",address.getText().toString());
                 startActivity(intent);
+                finish();
             }
         });
 

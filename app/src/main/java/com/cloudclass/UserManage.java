@@ -4,11 +4,22 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 public class UserManage {
 
-    private static UserManage instance;
+    public static UserManage instance;
+    String result="";
 
-    private UserManage() {
+
+    public UserManage() {
     }
 
     public static UserManage getInstance() {
@@ -24,6 +35,7 @@ public class UserManage {
         editor.putString("USER_NAME", username);
         editor.putString("PASSWORD", password);
         editor.commit();
+//        MyApplication app = (MyApplication)this.getApplication();
     }
 
     public UserInfo getUserInfo(Context context) {
@@ -46,23 +58,74 @@ public class UserManage {
         return false;
     }
 
+//    public boolean validate(Context context){
+//        UserInfo userInfo = getUserInfo(context);
+//        if (userInfo != null) {
+//            if (this.dbvalidate(userInfo)) {
+//                return true;
+//            } else {
+//                return false;
+//            }
+//        }
+//        return false;
+//    }
+
     public boolean validate(Context context){
-        UserInfo userInfo = getUserInfo(context);
-        if (userInfo != null) {
-            if (this.dbvalidate(userInfo)) {
+        UserInfo userinfo = getUserInfo(context);
+        if(userinfo!=null) {
+            String email = userinfo.getUserName();
+            String password = userinfo.getPassword();
+//            String status = "";
+            String url = "http://192.168.137.1:8079/users/login";
+            OkHttpClient okHttpClient = new OkHttpClient();
+            FormBody.Builder formBody = new FormBody.Builder();
+
+            formBody.add("email", email);
+            formBody.add("password", password);
+            Request request = new Request.Builder()
+                    .url(url)
+                    .post(formBody.build())
+                    .build();
+            Call call = okHttpClient.newCall(request);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    System.out.println("Failed");
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException{
+                    result = response.body().string();
+                }
+            });
+//            try {
+//                Response response = okHttpClient.newCall(request).execute();
+//                if(response.isSuccessful()){
+//                    result = response.body().string();
+//                }else{
+//                    System.out.println("failed------------");
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+
+            if(result.equals("true")){
+                System.out.println("-----------------------");
+                System.out.println("It is true in UserManage");
+                System.out.println("-----------------------");
                 return true;
-            } else {
+            }else{
+                System.out.println("-----------------------");
+                System.out.println(result);
+                System.out.println("-----------------------");
                 return false;
             }
+
+        }else{
+            System.out.println("-----------------------");
+            System.out.println("Not exist");
+            System.out.println("-----------------------");
+            return false;
         }
-        return false;
-    }
-
-    public boolean dbvalidate(UserInfo userinfo){
-        //to do
-        //将userinfo里面的用户名密码上传至数据库查询，结果集不为空为true，空false
-
-
-        return false;
     }
 }

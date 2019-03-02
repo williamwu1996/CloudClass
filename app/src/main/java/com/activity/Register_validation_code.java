@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cloudclass.R;
 
@@ -14,6 +15,7 @@ import java.io.IOException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -26,6 +28,7 @@ public class Register_validation_code extends Activity {
     Button next;
     String add;
     Button cancel;
+    String validationcode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +47,16 @@ public class Register_validation_code extends Activity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                Intent intent = new Intent(Register_validation_code.this, Register_password.class);
-                intent.putExtra("address", add);
-                startActivity(intent);
+//                System.out.println(validationcode+":"+code.getText().toString());
+                if(validationcode.equals(code.getText().toString())) {
+                    Intent intent = new Intent(Register_validation_code.this, Register_password.class);
+                    intent.putExtra("address", add);
+                    startActivity(intent);
+                    finish();
+                }else{
+//                    Toast.makeText(this,"验证码错误，请重新输入",Toast.LENGTH_SHORT).show();
+                    System.out.println("验证码错误！");
+                }
             }
         });
 
@@ -60,12 +70,12 @@ public class Register_validation_code extends Activity {
 
     public void getValidationCode(String address){
         String url = "http://192.168.137.1:8079/users/registerValidation";
-        MediaType mediaType = MediaType.parse("text/x-markdown; charset=utf-8");
-
         OkHttpClient okHttpClient = new OkHttpClient();
-        final Request request = new Request.Builder()
+        FormBody.Builder formBody = new FormBody.Builder();
+        formBody.add("address",address);
+        Request request = new Request.Builder()
                 .url(url)
-                .get()//默认就是GET请求，可以不写
+                .post(formBody.build())
                 .build();
         Call call = okHttpClient.newCall(request);
         call.enqueue(new Callback() {
@@ -76,7 +86,12 @@ public class Register_validation_code extends Activity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                message.setText(response.body().string());
+//                message.setText(response.body().string());
+                //获取收到的验证码
+                validationcode = response.body().string();
+                System.out.println("------------------------");
+                System.out.println(validationcode);
+                System.out.println("------------------------");
             }
         });
 
