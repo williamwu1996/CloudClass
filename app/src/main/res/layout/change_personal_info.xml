@@ -66,6 +66,37 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:layout_marginLeft="10dp"
+            android:text="邮箱"
+            android:layout_marginTop="8dp"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/change_personal_info_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:textSize="17sp"
+            android:singleLine="true" />
+    </RelativeLayout>
+
+    <View
+        android:layout_height="1.5dp"
+        android:background="#EFEFEF"
+        android:layout_width="match_parent"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/colorwhite"
+        android:layout_height="40dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
             android:text="姓名"
             android:layout_marginTop="8dp"
             android:textSize="17sp" />
@@ -79,7 +110,6 @@
             android:layout_marginRight="10dp"
             android:background="@null"
             android:singleLine="true"
-            android:text="吴玠璘"
             />
     </RelativeLayout>
 
@@ -114,7 +144,7 @@
             android:layout_marginRight="10dp"
             android:background="@null"
             android:singleLine="true"
-            android:text="15066250205"/>
+            />
     </RelativeLayout>
 
     <View
@@ -124,32 +154,7 @@
 
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:background="@color/colorwhite"
-        android:layout_height="40dp"
-        >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="10dp"
-            android:text="出生年份"
-            android:layout_marginTop="8dp"
-            android:textSize="17sp" />
-
-        <EditText
-            android:id="@+id/change_personal_info_doy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:background="@null"
-            android:singleLine="true"
-            android:text="1996年"/>
-    </RelativeLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -231,15 +236,17 @@
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
         >
+
         <Button
             android:id="@+id/change_personal_info_save_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="保存"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="@color/colorwhite"
             android:singleLine="true"
-            android:textSize="17sp"
-            android:background="@color/colorwhite"/>
+            android:text="保存"
+            android:textSize="17sp" />
     </RelativeLayout>
 
 </LinearLayout>

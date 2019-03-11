@@ -76,7 +76,7 @@ public class UserManage {
             String email = userinfo.getUserName();
             String password = userinfo.getPassword();
 //            String status = "";
-            String url = "http://192.168.137.1:8079/users/login";
+            String url = "http://192.168.3.169/users/login";
             OkHttpClient okHttpClient = new OkHttpClient();
             FormBody.Builder formBody = new FormBody.Builder();
 

@@ -5,7 +5,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +20,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -30,8 +35,23 @@ import com.activity.Join_class_code;
 import com.activity.Student_class_main;
 import com.activity.Teacher_class_main;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainPage extends AppCompatActivity implements View.OnClickListener{
 
@@ -49,6 +69,26 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
     RelativeLayout changepassword;
     RelativeLayout changeinfo;
     Button exit;
+    ImageView headpic;
+    TextView personname;
+
+//    private Handler mHandler = new Handler(){
+//
+//        @Override
+//        public void handleMessage(Message msg) {
+//            super.handleMessage(msg);
+//            switch (msg.what) {
+//                case 0:
+//                    ClassAdapter adapter = new ClassAdapter(classlist);
+//                    listView.setAdapter(adapter);
+//                    break;
+//
+//                default:
+//                    break;
+//            }
+//        }
+//
+//    };
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -89,8 +129,41 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main_page);
-        initActivity();
-        initClassList();
+        headpic = findViewById(R.id.me_person_image);
+        personname = findViewById(R.id.me_personname);
+
+        SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        String t = sp.getString("userid","");
+        personname.setText(sp.getString("personname",""));
+        String url = "http://192.168.3.169:8079/course/getallclass";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        FormBody.Builder formBody = new FormBody.Builder();
+        formBody.add("uid", t);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody.build())
+                .build();
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                System.out.println("-------------------------Failed----------------------------");
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+//                message.setText(response.body().string());
+                String body = response.body().string();
+                initClassList(body);
+                System.out.println("--------------------------------");
+                System.out.println(body);
+                System.out.println("--------------------------------");
+            }
+        });
+
+        initHeadpic(t);
+        initPerson(t);
         initMessageList();
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
@@ -106,6 +179,7 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putString("USER_NAME","");
                 editor.putString("PASSWORD","");
+                editor.putString("userid","");
                 editor.commit();
                 Intent intent = new Intent(MainPage.this,LoginActivity.class);
                 startActivity(intent);
@@ -114,10 +188,11 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
         });
 
         messageadapter = new MessageAdapter(MainPage.this, R.layout.message_item, messagelist);
-        classadapter = new ClassAdapter(MainPage.this,R.layout.class_item, classlist);
 
+//        classadapter = new ClassAdapter(MainPage.this,R.layout.class_item, classlist);
+        classadapter = new ClassAdapter(classlist);
         listView = findViewById(R.id.list_view);
-        listView.setAdapter(classadapter);
+//        listView.setAdapter(classadapter);
 
         listViewmessage = findViewById(R.id.list_view_message);
         listViewmessage.setAdapter(null);
@@ -157,11 +232,13 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //先判断是老师还是学生
-                if(position<2) {
+                TextView textView= (TextView) view.findViewById(R.id.iscreater);
+                String creater = textView.getText().toString();
+                if(creater.equals("true")) {
                     //老师
                     Intent intent2 = new Intent(MainPage.this, Teacher_class_main.class);
                     startActivity(intent2);
-                }else {
+                }else{
                     //学生
                     Intent intent1 = new Intent(MainPage.this, Student_class_main.class);
                     startActivity(intent1);
@@ -243,15 +320,32 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
     }
 
 
-    private void initClassList(){
-        ClassMain c = new ClassMain(R.drawable.timg,"123456","Java04","C Language","williamwu");
-        classlist.add(c);
-        ClassMain java = new ClassMain(R.drawable.timg,"345678","OS04","Java","williamwu");
-        classlist.add(java);
-        ClassMain python = new ClassMain(R.drawable.timg,"","Java03","Python","williamwu");
-        classlist.add(python);
-        ClassMain go = new ClassMain(R.drawable.timg,"","Dotnet01","GO","williamwu");
-        classlist.add(go);
+    private void initClassList(final String json){
+        SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        String id =  sp.getString("userid","");
+        try{
+            String url = "http://129.204.207.18:8079/resource/img/cover/";
+            JSONArray jsonArray = new JSONArray(json);
+            for(int i=0;i<jsonArray.length();i++){
+                JSONObject obj = jsonArray.getJSONObject(i);
+                if((obj.getJSONObject("course").getString("teacher")).equals(id)) {
+                    ClassMain c = new ClassMain(url+obj.getJSONObject("course").getInt("cid")+".png", String.valueOf(obj.getJSONObject("course").getInt("cid")), "", obj.getJSONObject("course").getString("cname"), obj.getString("teacherName"), "true");
+                    classlist.add(c);
+                }else{
+                    ClassMain c = new ClassMain(url+obj.getJSONObject("course").getInt("cid")+".png", "", "", obj.getJSONObject("course").getString("cname"), obj.getString("teacherName"), "false");
+                    classlist.add(c);
+                }
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                listView.setAdapter(classadapter);
+            }
+        });
     }
 
     private void initMessageList(){
@@ -265,9 +359,71 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
         messagelist.add(d);
     }
 
-    //参加的班课，消息，个人信息
-    public void initActivity(){
+    //个人信息,放入sp
+    public void initPerson(String id){
+        String url = "http://192.168.3.169:8079/users/getuserinfo";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        FormBody.Builder formBody = new FormBody.Builder();
+        formBody.add("uid", id);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody.build())
+                .build();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            public void onFailure(Call call, IOException e) {
 
+            }
+            public void onResponse(Call call, Response response) throws IOException {
+                String json = response.body().string();
+//                System.out.println(json);
+                try {
+                    JSONArray jsonArray = new JSONArray(json);
+                    JSONObject obj = jsonArray.getJSONObject(0);
+                    SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);//Context.MODE_PRIVATE表示SharePrefences的数据只有自己应用程序能访问。
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putString("email", obj.getString("email"));
+                    editor.putString("personname", obj.getString("name"));
+                    editor.putString("phone", obj.getString("phone"));
+                    editor.putString("gender", obj.getString("gender"));
+                    editor.commit();
+//                    System.out.println("-------------------Personal Info----------------------");
+//                    System.out.println(obj.getString("email"));
+//                    System.out.println(obj.getString("name"));
+//                    System.out.println(obj.getString("phone"));
+//                    System.out.println(obj.getString("gender"));
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
     }
+
+    public void initHeadpic(String id){
+        String url = "http://129.204.207.18:8079/resource/img/head_pic/"+id+".JPG";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+            public void onResponse(Call call, Response response) throws IOException {
+                System.out.println("----------------------------------------------------------------------------------------------");
+                System.out.println("图片图片picture");
+                InputStream inputStream = response.body().byteStream();//得到图片的流
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                Message msg = new Message();
+                msg.obj = bitmap;
+                handler.sendMessage(msg);
+            }
+        });
+    }
+    private Handler handler = new Handler(){
+        public void handleMessage(Message msg) {
+            Bitmap bitmap = (Bitmap)msg.obj;
+            headpic.setImageBitmap(bitmap);//将图片的流转换成图片
+        }
+    };
 
 }

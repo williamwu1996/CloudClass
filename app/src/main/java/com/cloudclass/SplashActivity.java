@@ -1,11 +1,15 @@
 package com.cloudclass;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.WindowManager;
+
+import org.json.JSONArray;
 
 import java.io.IOException;
 
@@ -53,7 +57,7 @@ public class SplashActivity extends Activity {
             String email = userinfo.getUserName();
             String password = userinfo.getPassword();
 //            String status = "";
-            String url = "http://192.168.137.1:8079/users/login";
+            String url = "http://192.168.3.169:8079/users/login";
             OkHttpClient okHttpClient = new OkHttpClient();
             FormBody.Builder formBody = new FormBody.Builder();
 
@@ -73,10 +77,19 @@ public class SplashActivity extends Activity {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException{
                     String result = response.body().string();
-                    if(result.equals("true")){
-                        mHandler.sendEmptyMessageDelayed(GO_HOME, 2000);
-                    }else{
-                        mHandler.sendEmptyMessageDelayed(GO_LOGIN, 2000);
+                    try {
+                        JSONArray jsonArray = new JSONArray(result);
+                        if ((jsonArray.get(1).toString()).equals("true")) {
+                            SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sp.edit();
+                            editor.putString("userid", jsonArray.get(0).toString());
+                            editor.commit();
+                            mHandler.sendEmptyMessageDelayed(GO_HOME, 2000);
+                        } else {
+                            mHandler.sendEmptyMessageDelayed(GO_LOGIN, 2000);
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                 }
             });

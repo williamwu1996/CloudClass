@@ -2,21 +2,23 @@ package com.cloudclass;
 
 public class ClassMain {
 
-    private int imageid;
+    private String imageid;
     private String code;
     private String classname;
     private String course;
     private String teacher;
+    private String iscreater;
 
-    public ClassMain(int imageid, String code, String classname, String course, String teacher) {
+    public ClassMain(String imageid, String code, String classname, String course, String teacher, String iscreater) {
         this.imageid = imageid;
         this.code = code;
         this.classname = classname;
         this.course = course;
         this.teacher = teacher;
+        this.iscreater = iscreater;
     }
 
-    public int getImageid() {
+    public String getImageid() {
         return imageid;
     }
 
@@ -34,5 +36,33 @@ public class ClassMain {
 
     public String getTeacher() {
         return teacher;
+    }
+
+    public String getIscreater() {
+        return iscreater;
+    }
+
+    public void setImageid(String imageid) {
+        this.imageid = imageid;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setClassname(String classname) {
+        this.classname = classname;
+    }
+
+    public void setCourse(String course) {
+        this.course = course;
+    }
+
+    public void setTeacher(String teacher) {
+        this.teacher = teacher;
+    }
+
+    public void setIscreater(String iscreater) {
+        this.iscreater = iscreater;
     }
 }

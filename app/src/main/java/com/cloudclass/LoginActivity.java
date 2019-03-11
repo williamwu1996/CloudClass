@@ -1,7 +1,9 @@
 package com.cloudclass;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -10,6 +12,8 @@ import android.widget.Toast;
 
 import com.activity.Forget_email;
 import com.activity.Register_email;
+
+import org.json.JSONArray;
 
 import java.awt.font.TextAttribute;
 import java.io.IOException;
@@ -73,7 +77,7 @@ public class LoginActivity extends Activity {
                     System.out.println("username:"+userName);
                     System.out.println("password"+userPwd);
                     final String[] status = {""};
-                    String url = "http://192.168.137.1:8079/users/login";
+                    String url = "http://192.168.3.169:8079/users/login";
                     OkHttpClient okHttpClient = new OkHttpClient();
                     FormBody.Builder formBody = new FormBody.Builder();
                     formBody.add("email", userName);
@@ -91,31 +95,29 @@ public class LoginActivity extends Activity {
 
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
-//                message.setText(response.body().string());
-                            if((response.body().string()).equals("true")){
-                                UserManage.getInstance().saveUserInfo(LoginActivity.this, userName, userPwd);
-//                                Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(LoginActivity.this, MainPage.class);//跳转到主页
-                                startActivity(intent);
-                                finish();
-                            }else{
-                                System.out.println("---------------------");
-                                System.out.println("用户名密码错误");
-                                System.out.println("----------------------");
+                            String result = response.body().string();
+                            try {
+                                JSONArray jsonArray = new JSONArray(result);
+                                if ((jsonArray.get(1).toString()).equals("true")) {
+                                    SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sp.edit();
+                                    editor.putString("userid", jsonArray.get(0).toString());
+                                    editor.commit();
+                                    UserManage.getInstance().saveUserInfo(LoginActivity.this, userName, userPwd);
+                                    Intent intent = new Intent(LoginActivity.this, MainPage.class);//跳转到主页
+                                    startActivity(intent);
+                                    finish();
+
+                                } else {
+                                    System.out.println("---------------------");
+                                    System.out.println("用户名密码错误");
+                                    System.out.println("----------------------");
+                                }
+                            }catch (Exception e){
+                                e.printStackTrace();
                             }
                         }
                     });
-//                    if(status[0].equals("true")){
-//                        UserManage.getInstance().saveUserInfo(LoginActivity.this, userName, userPwd);
-//                        Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent(LoginActivity.this, MainPage.class);//跳转到主页
-//                        startActivity(intent);
-//                        finish();
-//                    }else{
-//                        System.out.println("---------------------");
-//                        System.out.println("用户名密码错误");
-//                        System.out.println("----------------------");
-//                    }
                     break;
             }
 

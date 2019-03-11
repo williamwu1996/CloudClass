@@ -4,12 +4,16 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
@@ -19,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -28,9 +33,18 @@ import android.widget.Toast;
 import com.cloudclass.R;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class Change_personal_info extends Activity implements View.OnClickListener{
 
@@ -53,10 +67,32 @@ public class Change_personal_info extends Activity implements View.OnClickListen
     ImageView maleicon;
     ImageView femaleicon;
 
+    TextView textemail;
+    EditText editname,editphone;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.change_personal_info);
+
+        textemail = findViewById(R.id.change_personal_info_email);
+        editname = findViewById(R.id.change_personal_info_name);
+        editphone = findViewById(R.id.change_personal_info_phoneno);
+
+        //初始化姓名，电话，性别，邮箱
+        SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        String userid = sp.getString("userid","");
+        String name = sp.getString("personname","");
+        String pgender = sp.getString("gender","");
+        String email = sp.getString("USER_NAME","");
+        String phone = sp.getString("phone","");
+
+        textemail.setText(email);
+        editname.setText(name);
+        editphone.setText(phone);
+        //初始化头像
+        initHeadpic(userid);
 
         male = findViewById(R.id.change_personal_info_male);
         female = findViewById(R.id.change_personal_info_female);
@@ -64,6 +100,18 @@ public class Change_personal_info extends Activity implements View.OnClickListen
         femaleicon = findViewById(R.id.change_personal_info_female_icon);
         save = findViewById(R.id.change_personal_info_save_btn);
         save.setOnClickListener(this);
+
+        if(pgender.equals("M")){
+            gender = 1;
+            maleicon.setVisibility(View.VISIBLE);
+            femaleicon.setVisibility(View.INVISIBLE);
+        }
+
+        if(pgender.equals("F")){
+            gender = 2;
+            maleicon.setVisibility(View.INVISIBLE);
+            femaleicon.setVisibility(View.VISIBLE);
+        }
 
         male.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,19 +217,61 @@ public class Change_personal_info extends Activity implements View.OnClickListen
             }
             break;
             case R.id.change_personal_info_save_btn:{
+                //向服务器发送upadte请求，Toast修改成功，修改sp，finish()
+                SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+                String userid = sp.getString("userid","");
+                String password = sp.getString("PASSWORD","");
+                String email = textemail.getText().toString();
+                String name = editname.getText().toString();
+                String phone = editphone.getText().toString();
+                String pgender;
                 if(gender==1){
-                    //男
-                    Toast.makeText(this, "男性", Toast.LENGTH_SHORT).show();
-                }else if(gender==2){
-                    //女
-                    Toast.makeText(this, "女性", Toast.LENGTH_SHORT).show();
+                    pgender = "M";
                 }else{
-                    //exception
-                    Toast.makeText(this, "无效性别", Toast.LENGTH_SHORT).show();
+                    pgender = "F";
                 }
+                String url = "http://192.168.3.169:8079/users/update";
+                OkHttpClient okHttpClient = new OkHttpClient();
+                FormBody.Builder formBody = new FormBody.Builder();
+                formBody.add("uid",userid);
+                formBody.add("name",name);
+                formBody.add("phone",phone);
+                formBody.add("gender",pgender);
+                formBody.add("email",email);
+                formBody.add("password",password);
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(formBody.build())
+                        .build();
+                okHttpClient.newCall(request).enqueue(new Callback() {
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+                    public void onResponse(Call call, Response response) throws IOException {
+                        System.out.println(response.body().string());
+                        finishUpdate();
+                    }
+                });
             }
             break;
         }
+    }
+
+    public void finishUpdate(){
+        String g;
+        if(gender==1){
+            g = "M";
+        }else{
+            g = "F";
+        }
+        //Toast.makeText(this,"修改成功",Toast.LENGTH_SHORT).show();
+        SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("personname", editname.getText().toString());
+        editor.putString("phone", editphone.getText().toString());
+        editor.putString("gender", g);
+        editor.commit();
+        finish();
     }
 
     private void openGallery() {
@@ -321,4 +411,30 @@ public class Change_personal_info extends Activity implements View.OnClickListen
 
         startActivityForResult(intent, Create_class_info.REQUEST_CROP); //设置裁剪参数显示图片至ImageVie
     }
+
+    public void initHeadpic(String id){
+        String url = "http://129.204.207.18:8079/resource/img/head_pic/"+id+".JPG";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            public void onFailure(Call call, IOException e) {
+
+            }
+            public void onResponse(Call call, Response response) throws IOException {
+                InputStream inputStream = response.body().byteStream();//得到图片的流
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                Message msg = new Message();
+                msg.obj = bitmap;
+                handler.sendMessage(msg);
+            }
+        });
+    }
+    private Handler handler = new Handler(){
+        public void handleMessage(Message msg) {
+            Bitmap bitmap = (Bitmap)msg.obj;
+            iv.setImageBitmap(bitmap);//将图片的流转换成图片
+        }
+    };
 }
