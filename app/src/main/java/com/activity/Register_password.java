@@ -43,17 +43,23 @@ public class Register_password extends Activity {
             @Override
             public void onClick(View arg0) {
                 //判断两个密码是否相同
-                if((password.getText().toString()).equals(confirm.getText().toString())){
-                    //注册
-                    Intent intent = getIntent();
-                    String address = intent.getStringExtra("address");
-                    String pass = password.getText().toString();
-                    register(address,pass);
-                    finish();
-                }else{
-                    Toast.makeText(Register_password.this, "密码不一致", Toast.LENGTH_LONG).show();
+                if((password.getText().toString()).equals("")){
+                    Toast.makeText(Register_password.this, "密码不能为空", Toast.LENGTH_LONG).show();
                     password.setText("");
                     confirm.setText("");
+                }else {
+                    if ((password.getText().toString()).equals(confirm.getText().toString())) {
+                        //注册
+                        Intent intent = getIntent();
+                        String address = intent.getStringExtra("address");
+                        String pass = password.getText().toString();
+                        register(address, pass);
+                        finish();
+                    } else {
+                        Toast.makeText(Register_password.this, "密码不一致", Toast.LENGTH_LONG).show();
+                        password.setText("");
+                        confirm.setText("");
+                    }
                 }
             }
         });
@@ -67,7 +73,7 @@ public class Register_password extends Activity {
     }
 
     public void register(String address,String password){
-        String url = "http://192.168.137.1:8079/users/register";
+        String url = "http://192.168.3.169:8079/users/register";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("email",address);

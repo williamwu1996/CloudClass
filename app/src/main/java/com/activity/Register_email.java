@@ -6,8 +6,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.cloudclass.R;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class Register_email extends Activity {
 
@@ -24,12 +34,42 @@ public class Register_email extends Activity {
         cancel = findViewById(R.id.register_email_cancel);
 
         next.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View arg0) {
-                Intent intent = new Intent(Register_email.this,Register_validation_code.class);
-                intent.putExtra("address",address.getText().toString());
-                startActivity(intent);
-                finish();
+                if((address.getText().toString()).equals("")){
+                    showEmpty();
+                }else {
+                    String url = "http://192.168.3.169:8079/users/emailCheck";
+                    OkHttpClient okHttpClient = new OkHttpClient();
+                    FormBody.Builder formBody = new FormBody.Builder();
+                    formBody.add("email", address.getText().toString());
+                    final Request request = new Request.Builder()
+                            .url(url)
+                            .post(formBody.build())
+                            .build();
+                    Call call = okHttpClient.newCall(request);
+                    call.enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            System.out.println("Failed");
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            String result = response.body().string();
+                            if (result.equals("true")) {
+                                Intent intent = new Intent(Register_email.this, Register_validation_code.class);
+                                intent.putExtra("address", address.getText().toString());
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                showDuplicate();
+                            }
+                        }
+                    });
+
+                }
             }
         });
 
@@ -41,6 +81,12 @@ public class Register_email extends Activity {
         });
     }
 
+    public void showDuplicate(){
+        Toast.makeText(this,"此邮箱已经被注册！",Toast.LENGTH_SHORT).show();
+    }
 
+    public void showEmpty(){
+        Toast.makeText(this,"地址不能为空",Toast.LENGTH_SHORT).show();
+    }
 
 }

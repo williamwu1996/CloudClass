@@ -264,7 +264,6 @@ public class Change_personal_info extends Activity implements View.OnClickListen
         }else{
             g = "F";
         }
-        //Toast.makeText(this,"修改成功",Toast.LENGTH_SHORT).show();
         SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("personname", editname.getText().toString());
