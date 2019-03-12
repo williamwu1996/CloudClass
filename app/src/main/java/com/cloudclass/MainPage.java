@@ -73,7 +73,6 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
     TextView personname;
 
 //    private Handler mHandler = new Handler(){
-//
 //        @Override
 //        public void handleMessage(Message msg) {
 //            super.handleMessage(msg);
