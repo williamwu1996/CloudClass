@@ -212,7 +212,6 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
         changepassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                //创建班课
                 Intent intent = new Intent(MainPage.this,Change_password.class);
                 startActivity(intent);
             }
@@ -221,7 +220,6 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
         changeinfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                //创建班课
                 Intent intent = new Intent(MainPage.this,Change_personal_info.class);
                 startActivity(intent);
             }
@@ -232,16 +230,22 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //先判断是老师还是学生
-                TextView textView= (TextView) view.findViewById(R.id.iscreater);
-                String creater = textView.getText().toString();
-                if(creater.equals("true")) {
-                    //老师
-                    Intent intent2 = new Intent(MainPage.this, Teacher_class_main.class);
-                    startActivity(intent2);
-                }else{
+                TextView iscreater = (TextView) view.findViewById(R.id.iscreater);
+                TextView code = view.findViewById(R.id.code);
+                SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+                String uid = sp.getString("userid","");
+                if((code.getText().toString()).equals("")) {
                     //学生
                     Intent intent1 = new Intent(MainPage.this, Student_class_main.class);
+                    intent1.putExtra("cid",code.getText().toString());
+                    intent1.putExtra("uid",uid);
                     startActivity(intent1);
+                }else{
+                    //老师
+                    Intent intent2 = new Intent(MainPage.this, Teacher_class_main.class);
+                    intent2.putExtra("cid",code.getText().toString());
+                    intent2.putExtra("uid",uid);
+                    startActivity(intent2);
                 }
             }
         });
@@ -329,10 +333,10 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
             for(int i=0;i<jsonArray.length();i++){
                 JSONObject obj = jsonArray.getJSONObject(i);
                 if((obj.getJSONObject("course").getString("teacher")).equals(id)) {
-                    ClassMain c = new ClassMain(url+obj.getJSONObject("course").getInt("cid")+".png", String.valueOf(obj.getJSONObject("course").getInt("cid")), "", obj.getJSONObject("course").getString("cname"), obj.getString("teacherName"), "true");
+                    ClassMain c = new ClassMain(url+obj.getJSONObject("course").getInt("cid")+".png", String.valueOf(obj.getJSONObject("course").getInt("cid")), "", obj.getJSONObject("course").getString("cname"), obj.getString("teacherName"), String.valueOf(obj.getJSONObject("course").getInt("cid")));
                     classlist.add(c);
                 }else{
-                    ClassMain c = new ClassMain(url+obj.getJSONObject("course").getInt("cid")+".png", "", "", obj.getJSONObject("course").getString("cname"), obj.getString("teacherName"), "false");
+                    ClassMain c = new ClassMain(url+obj.getJSONObject("course").getInt("cid")+".png", "", "", obj.getJSONObject("course").getString("cname"), obj.getString("teacherName"), String.valueOf(obj.getJSONObject("course").getInt("cid")));
                     classlist.add(c);
                 }
 
