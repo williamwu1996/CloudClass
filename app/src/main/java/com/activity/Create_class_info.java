@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -29,9 +30,20 @@ import com.cloudclass.MainPage;
 import com.cloudclass.R;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class Create_class_info extends Activity implements View.OnClickListener {
 
@@ -66,9 +78,49 @@ public class Create_class_info extends Activity implements View.OnClickListener 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                //创建班课
-                Intent intent = new Intent(Create_class_info.this,Create_class_success.class);
-                startActivity(intent);
+                //创建班课,还有个图片
+                if(imgFile==null){
+                    System.out.println("请选择一张图片");
+                }else {
+                    SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);//Context.MODE_PRIVATE表示SharePrefences的数据只有自己应用程序能访问。
+                    String coursen = coursename.getText().toString();
+                    String uid = sp.getString("userid", "");
+                    String prof = profile.getText().toString();
+                    String classn = classname.getText().toString();
+                    String url = "http://192.168.3.169:8079/course/create";
+                    OkHttpClient okHttpClient = new OkHttpClient();
+                    FormBody.Builder formBody = new FormBody.Builder();
+                    formBody.add("uid", uid);
+                    formBody.add("coursename", coursen);
+                    formBody.add("profile", prof);
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .post(formBody.build())
+                            .build();
+                    Call call = okHttpClient.newCall(request);
+                    call.enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+
+                            e.printStackTrace();
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+//                message.setText(response.body().string());
+                            //需要返回一个course id
+                            String body = response.body().string();
+                            System.out.println("---------------------------------Result is : "+body);
+                            Intent intent = new Intent(Create_class_info.this,Create_class_success.class);
+                            intent.putExtra("cid",body);
+                            startActivity(intent);
+//                            updateCover();
+                        }
+                    });
+                }
+
+
+
             }
         });
 
@@ -87,6 +139,28 @@ public class Create_class_info extends Activity implements View.OnClickListener 
                 showPopupWindow();
             }
         });
+    }
+
+    public void updatecover(String path){
+        try {
+            OkHttpClient client=new OkHttpClient();
+            RequestBody fileBody = RequestBody.create(MediaType.parse("image/png"), imgFile);//将file转换成RequestBody文件
+            RequestBody requestBody=new MultipartBody.Builder()
+                    .addFormDataPart("file","", fileBody)
+                    .addFormDataPart("path",path)
+                    .build();
+
+            Request request=new Request.Builder()
+                    .url("http://192.168.3.169:8079/resource/uploadpic")
+                    .post(requestBody)
+                    .build();
+            Response response=client.newCall(request).execute();
+            String responseBody=response.body().string();
+            System.out.println("---------------uploadpic response----------------------"+responseBody);
+            finish();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showPopupWindow() {
@@ -193,7 +267,7 @@ public class Create_class_info extends Activity implements View.OnClickListener 
             }
         }
     }
-
+    File imgFile=null;
     private void takePhone() {
         // 要保存的文件名
         String time = new SimpleDateFormat("yyyyMMddHHmmss", Locale.CHINA).format(new Date());
@@ -205,7 +279,7 @@ public class Create_class_info extends Activity implements View.OnClickListener 
             file.mkdirs();
         }
         // 要保存的图片文件
-        File imgFile = new File(file, fileName + ".jpeg");
+        imgFile = new File(file, fileName + ".jpeg");
         // 将file转换成uri
         // 注意7.0及以上与之前获取的uri不一样了，返回的是provider路径
         imgUri = getUriForFile(this, imgFile);
