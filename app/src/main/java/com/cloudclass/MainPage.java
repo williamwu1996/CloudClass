@@ -230,7 +230,7 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //先判断是老师还是学生
-                TextView iscreater = (TextView) view.findViewById(R.id.iscreater);
+                //TextView iscreater = (TextView) view.findViewById(R.id.iscreater);
                 TextView code = view.findViewById(R.id.code);
                 SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                 String uid = sp.getString("userid","");

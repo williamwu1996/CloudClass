@@ -92,6 +92,10 @@ public class Teacher_class_main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.teacher_class_main);
+        Intent intent = getIntent();
+        String cid = intent.getStringExtra("cid");
+        String uid = intent.getStringExtra("uid");
+
         initMemberList();
 
         checkin = findViewById(R.id.teacher_class_main_members_checkin_btn);
