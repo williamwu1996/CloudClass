@@ -4,12 +4,16 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
@@ -19,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -26,10 +31,25 @@ import android.widget.Toast;
 
 import com.cloudclass.R;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class Teacher_class_edit_detail extends Activity implements View.OnClickListener {
 
@@ -41,6 +61,9 @@ public class Teacher_class_edit_detail extends Activity implements View.OnClickL
     private Uri imgUri; // 拍照时返回的uri
     private Uri mCutUri;// 图片裁剪时返回的uri
     private boolean hasPermission = true;
+
+    EditText etclassname, etcoursename, etprofile;
+    TextView tvclasscode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +77,6 @@ public class Teacher_class_edit_detail extends Activity implements View.OnClickL
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                //创建班课
                 finish();
             }
         });
@@ -63,8 +85,13 @@ public class Teacher_class_edit_detail extends Activity implements View.OnClickL
             @Override
             public void onClick(View arg0) {
                 //先保存后结束activity
+                String classname = etclassname.getText().toString();
+                String coursename = etcoursename.getText().toString();
+                String profile = etprofile.getText().toString();
+                String classcode = tvclasscode.getText().toString();
 
-                finish();
+                updateClass(classcode,classname,coursename,profile);
+//                finish();
             }
         });
 
@@ -74,6 +101,24 @@ public class Teacher_class_edit_detail extends Activity implements View.OnClickL
                 showPopupWindow();
             }
         });
+
+        Intent intent = getIntent();
+        String cid = intent.getStringExtra("cid");
+        String profile = intent.getStringExtra("profile");
+        String classname = intent.getStringExtra("classname");
+        String coursename = intent.getStringExtra("coursename");
+
+        initClasscover(cid);
+        etclassname = findViewById(R.id.teacher_class_main_detail_edit_classname);
+        etcoursename = findViewById(R.id.teacher_class_main_detail_edit_coursename);
+        etprofile = findViewById(R.id.teacher_class_main_detail_edit_profile);
+        tvclasscode = findViewById(R.id.teacher_class_main_detail_edit_classcode);
+
+        etclassname.setText(classname);
+        etcoursename.setText(coursename);
+        etprofile.setText(profile);
+        tvclasscode.setText(cid);
+
     }
 
     private void showPopupWindow() {
@@ -179,7 +224,7 @@ public class Teacher_class_edit_detail extends Activity implements View.OnClickL
             }
         }
     }
-
+    File imgFile = null;
     private void takePhone() {
         // 要保存的文件名
         String time = new SimpleDateFormat("yyyyMMddHHmmss", Locale.CHINA).format(new Date());
@@ -191,7 +236,7 @@ public class Teacher_class_edit_detail extends Activity implements View.OnClickL
             file.mkdirs();
         }
         // 要保存的图片文件
-        File imgFile = new File(file, fileName + ".jpeg");
+        imgFile = new File(file, fileName + ".jpeg");
         // 将file转换成uri
         // 注意7.0及以上与之前获取的uri不一样了，返回的是provider路径
         imgUri = getUriForFile(this, imgFile);
@@ -283,5 +328,83 @@ public class Teacher_class_edit_detail extends Activity implements View.OnClickL
         this.sendBroadcast(intentBc);
 
         startActivityForResult(intent, Create_class_info.REQUEST_CROP); //设置裁剪参数显示图片至ImageVie
+    }
+
+    public void initClasscover(String cid){
+        String url = "http://129.204.207.18:8079/resource/img/cover/"+cid+".png";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+            public void onResponse(Call call, Response response) throws IOException {
+                System.out.println("----------------------------------------------------------------------------------------------");
+                System.out.println("图片图片picture");
+                InputStream inputStream = response.body().byteStream();//得到图片的流
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                Message msg = new Message();
+                msg.obj = bitmap;
+                handler.sendMessage(msg);
+            }
+        });
+    }
+    private Handler handler = new Handler(){
+        public void handleMessage(Message msg) {
+            Bitmap bitmap = (Bitmap)msg.obj;
+            iv.setImageBitmap(bitmap);//将图片的流转换成图片
+        }
+    };
+
+    public void updateClass(String cid, String classname, String coursename, String profile){
+        String url = "http://192.168.3.169:8079/course/updatecourse";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        FormBody.Builder formBody = new FormBody.Builder();
+        formBody.add("cid", cid);
+        formBody.add("coursename", coursename);
+        formBody.add("classname", classname);
+        formBody.add("profile", profile);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody.build())
+                .build();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            public void onFailure(Call call, IOException e) {
+
+            }
+            public void onResponse(Call call, Response response) throws IOException {
+                String json = response.body().string();
+//                System.out.println(json);
+                if (imgFile != null) {
+                    String cid = tvclasscode.getText().toString();
+                    updateCover(cid);
+                }else {
+                    finish();
+                }
+            }
+        });
+    }
+
+    public void updateCover(String cid){
+        try {
+            OkHttpClient client=new OkHttpClient();
+            RequestBody fileBody = RequestBody.create(MediaType.parse("image/png"), imgFile);//将file转换成RequestBody文件
+            RequestBody requestBody=new MultipartBody.Builder()
+                    .addFormDataPart("file","", fileBody)
+                    .addFormDataPart("path","\\cover\\" + cid + ".png")
+                    .build();
+            Request request=new Request.Builder()
+                    .url("http://192.168.3.169:8079/resource/uploadpic")
+                    .post(requestBody)
+                    .build();
+            Response response=client.newCall(request).execute();
+            String responseBody=response.body().string();
+            System.out.println("---------------uploadpic response----------------------"+responseBody);
+            finish();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

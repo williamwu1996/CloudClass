@@ -58,18 +58,6 @@ public class UserManage {
         return false;
     }
 
-//    public boolean validate(Context context){
-//        UserInfo userInfo = getUserInfo(context);
-//        if (userInfo != null) {
-//            if (this.dbvalidate(userInfo)) {
-//                return true;
-//            } else {
-//                return false;
-//            }
-//        }
-//        return false;
-//    }
-
     public boolean validate(Context context){
         UserInfo userinfo = getUserInfo(context);
         if(userinfo!=null) {

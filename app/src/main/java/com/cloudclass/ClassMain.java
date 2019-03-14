@@ -8,14 +8,17 @@ public class ClassMain {
     private String course;
     private String teacher;
     private String iscreater;
+    private String profile;
 
-    public ClassMain(String imageid, String code, String classname, String course, String teacher, String iscreater) {
+
+    public ClassMain(String imageid, String code, String classname, String course, String teacher, String iscreater, String profile) {
         this.imageid = imageid;
         this.code = code;
         this.classname = classname;
         this.course = course;
         this.teacher = teacher;
         this.iscreater = iscreater;
+        this.profile = profile;
     }
 
     public String getImageid() {
@@ -64,5 +67,13 @@ public class ClassMain {
 
     public void setIscreater(String iscreater) {
         this.iscreater = iscreater;
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
     }
 }

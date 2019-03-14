@@ -20,5 +20,5 @@
         android:layout_height="wrap_content"
         android:text="已签到"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="200dp"/>
+        android:layout_marginLeft="230dp"/>
 </LinearLayout>

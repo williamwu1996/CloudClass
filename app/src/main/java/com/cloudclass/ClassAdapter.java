@@ -73,6 +73,7 @@ public class ClassAdapter extends BaseAdapter {
             holder.code = (TextView) convertView.findViewById(R.id.code);
             holder.teacher = (TextView) convertView.findViewById(R.id.teacher);
             holder.iscreater = (TextView) convertView.findViewById(R.id.iscreater);
+            holder.profile = (TextView) convertView.findViewById(R.id.profile);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -84,6 +85,7 @@ public class ClassAdapter extends BaseAdapter {
         holder.code.setText(news.getCode());
         holder.teacher.setText(news.getTeacher());
         holder.iscreater.setText(news.getIscreater());
+        holder.profile.setText(news.getProfile());
 //         如果本地已有缓存，就从本地读取，否则从网络请求数据
         if (mImageCache.get(news.getImageid()) != null) {
             holder.iv.setImageDrawable(mImageCache.get(news.getImageid()));
@@ -96,7 +98,7 @@ public class ClassAdapter extends BaseAdapter {
 
     class ViewHolder {
         ImageView iv;
-        TextView title, summary, code, teacher, iscreater;
+        TextView title, summary, code, teacher, iscreater, profile;
     }
 
     class ImageTask extends AsyncTask<String, Void, BitmapDrawable> {
