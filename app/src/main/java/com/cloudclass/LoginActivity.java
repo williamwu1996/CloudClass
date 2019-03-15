@@ -102,6 +102,7 @@ public class LoginActivity extends Activity {
                                     SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                                     SharedPreferences.Editor editor = sp.edit();
                                     editor.putString("userid", jsonArray.get(0).toString());
+                                    editor.putString("userid", jsonArray.get(0).toString());
                                     editor.commit();
                                     UserManage.getInstance().saveUserInfo(LoginActivity.this, userName, userPwd);
                                     Intent intent = new Intent(LoginActivity.this, MainPage.class);//跳转到主页

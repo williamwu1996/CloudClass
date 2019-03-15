@@ -25,6 +25,8 @@ import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import com.cloudclass.HomeworkItem;
+import com.cloudclass.HomeworkItemAdapter;
 import com.cloudclass.R;
 import com.cloudclass.StudentMemberItem;
 import com.cloudclass.StudentMemberItemAdapter;
@@ -51,6 +53,8 @@ public class Student_class_main extends AppCompatActivity {
     private String[] data = {"aaa","bbb","bbb","bbb","bbb","bbb","bbb","bbb","bbb","bbb","bbb","bbb"};
     private List<StudentResourceItem> resourcelist = new ArrayList<>();
     private List<StudentMemberItem> memberlist = new ArrayList<>();
+    private List<HomeworkItem> goinglist = new ArrayList<>();
+    private List<HomeworkItem> endlist = new ArrayList<>();
 
     private LinearLayout memberLinearLayout;
     private LinearLayout detailLinearLayout;
@@ -65,6 +69,9 @@ public class Student_class_main extends AppCompatActivity {
 
     ImageView classcover;
     TextView tvclassname, tvcoursename, tvteacher, tvprofile, tvclasscode;
+
+    ListView goingListView, concludedListView;
+    HomeworkItemAdapter goingAdapter, concludedAdapter;
 
     TextView title;
 
@@ -157,22 +164,18 @@ public class Student_class_main extends AppCompatActivity {
                 .setContent(R.id.student_class_main_homework_concluded_tab));
 
 
-        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(Student_class_main.this,android.R.layout.simple_list_item_1,data);
-        ListView goingListView = findViewById(R.id.student_class_main_homework_going_listview);
-        goingListView.setAdapter(adapter1);
+        goingListView = findViewById(R.id.student_class_main_homework_going_listview);
 
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(Student_class_main.this,android.R.layout.simple_list_item_1,data);
-        ListView concludedListView = findViewById(R.id.student_class_main_homework_concluded_listview);
-        concludedListView.setAdapter(adapter2);
+        concludedListView = findViewById(R.id.student_class_main_homework_concluded_listview);
+
+        initHomework(cid);
 
         resourceAdapter = new StudentResourceItemAdapter(Student_class_main.this,R.layout.student_resource_item, resourcelist);
         resourceListView = findViewById(R.id.student_class_main_resource_listview);
         resourceListView.setAdapter(resourceAdapter);
 
-//        memberAdapter = new StudentMemberItemAdapter(Student_class_main.this,R.layout.student_member_item, memberlist);
         memberAdapter = new StudentMemberItemAdapter(memberlist);
         memberListView = findViewById(R.id.student_class_main_members_listview);
-//        memberListView.setAdapter(memberAdapter);
 
         mTextMessage = (TextView) findViewById(R.id.student_class_main_test_message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.student_class_navigation);
@@ -200,18 +203,24 @@ public class Student_class_main extends AppCompatActivity {
             }
         });
 
+        goingAdapter = new HomeworkItemAdapter(Student_class_main.this,R.layout.homework_item, goinglist);
         goingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView hid = findViewById(R.id.homework_item_id);
                 Intent intent = new Intent(Student_class_main.this,Student_homework_answer_going.class);
+                intent.putExtra("hid",hid.getText().toString());
                 startActivity(intent);
             }
         });
 
+        concludedAdapter = new HomeworkItemAdapter(Student_class_main.this,R.layout.homework_item, endlist);
         concludedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView hid = findViewById(R.id.homework_item_id);
                 Intent intent = new Intent(Student_class_main.this,Student_homework_answer_concluded.class);
+                intent.putExtra("hid",hid.getText().toString());
                 startActivity(intent);
             }
         });
@@ -361,4 +370,57 @@ public class Student_class_main extends AppCompatActivity {
             classcover.setImageBitmap(bitmap);//将图片的流转换成图片
         }
     };
+
+    public void initHomework(String cid){
+        String url = "http://192.168.3.169:8079/homework/gethomeworks";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        FormBody.Builder formBody = new FormBody.Builder();
+        formBody.add("cid", cid);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody.build())
+                .build();
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                System.out.println("-------------------------Failed----------------------------");
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+//                message.setText(response.body().string());
+                String body = response.body().string();
+                listhomework(body);
+            }
+        });
+    }
+
+    public void listhomework(String json){
+        try {
+            JSONArray jsonArray = new JSONArray(json);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+                HomeworkItem h = new HomeworkItem(obj.getString("question"),obj.getString("hid"));
+                if ((obj.getString("status")).equals("dns")) {
+
+                }else if((obj.getString("status")).equals("going")) {
+                    goinglist.add(h);
+                }else{
+                    endlist.add(h);
+                }
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                goingListView.setAdapter(goingAdapter);
+                concludedListView.setAdapter(concludedAdapter);
+            }
+        });
+    }
 }

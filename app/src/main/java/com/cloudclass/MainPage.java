@@ -116,7 +116,7 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
 
         SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         String t = sp.getString("userid","");
-        personname.setText(sp.getString("personname",""));
+
         String url = "http://192.168.3.169:8079/course/getallclass";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
@@ -383,6 +383,7 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
                     editor.putString("phone", obj.getString("phone"));
                     editor.putString("gender", obj.getString("gender"));
                     editor.commit();
+                    personname.setText(sp.getString("personname",""));
                 }catch (Exception e){
                     e.printStackTrace();
                 }

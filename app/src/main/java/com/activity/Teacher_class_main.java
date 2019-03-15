@@ -21,6 +21,8 @@ import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import com.cloudclass.HomeworkItem;
+import com.cloudclass.HomeworkItemAdapter;
 import com.cloudclass.R;
 import com.cloudclass.StudentMemberItem;
 import com.cloudclass.StudentMemberItemAdapter;
@@ -44,6 +46,10 @@ public class Teacher_class_main extends AppCompatActivity {
 
     private String[] data = {"aaa","bbb","bbb","bbb","bbb","bbb","bbb","bbb","bbb","bbb","bbb","bbb"};
     private List<StudentMemberItem> memberlist = new ArrayList<>();
+    private List<HomeworkItem> dnslist = new ArrayList<>();
+    private List<HomeworkItem> goinglist = new ArrayList<>();
+    private List<HomeworkItem> endlist = new ArrayList<>();
+
 
     private TextView mTextMessage;
     Button back;
@@ -57,6 +63,9 @@ public class Teacher_class_main extends AppCompatActivity {
     Button starthomework;
     Button checkin;
     TextView title;
+
+    ListView dnsListView, goingListView, concludedListView;
+    HomeworkItemAdapter dnsAdapter, goingAdapter, concludedAdapter;
 
     private ListView memberListView;
     StudentMemberItemAdapter memberAdapter;
@@ -155,8 +164,12 @@ public class Teacher_class_main extends AppCompatActivity {
         starthomework.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Teacher_class_main.this,Teacher_edit_homework.class);
-                startActivity(intent);
+                Intent intent = getIntent();
+                String cid = intent.getStringExtra("cid");
+                Intent intent1 = new Intent(Teacher_class_main.this,Teacher_start_homework.class);
+                intent1.putExtra("cid",cid);
+                System.out.println("cid in main is :"+cid);
+                startActivity(intent1);
             }
         });
 
@@ -216,35 +229,41 @@ public class Teacher_class_main extends AppCompatActivity {
         tabHost.addTab(tabHost.newTabSpec("").setIndicator("已结束")
                 .setContent(R.id.teacher_homework_concluded_tab));
 
-        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(Teacher_class_main.this,android.R.layout.simple_list_item_1,data);
-        ListView dnsListView = findViewById(R.id.teacher_homework_dns_listview);
-        dnsListView.setAdapter(adapter1);
+        initHomework(cid);
+
+
+        dnsAdapter = new HomeworkItemAdapter(Teacher_class_main.this,R.layout.homework_item, dnslist);
+        dnsListView = findViewById(R.id.teacher_homework_dns_listview);
         dnsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView hid = findViewById(R.id.homework_item_id);
                 Intent intent = new Intent(Teacher_class_main.this,Teacher_edit_homework.class);
+                intent.putExtra("hid",hid.getText().toString());
                 startActivity(intent);
             }
         });
 
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(Teacher_class_main.this,android.R.layout.simple_list_item_1,data);
-        ListView goingListView = findViewById(R.id.teacher_homework_going_listview);
-        goingListView.setAdapter(adapter2);
+        goingAdapter = new HomeworkItemAdapter(Teacher_class_main.this,R.layout.homework_item, goinglist);
+        goingListView = findViewById(R.id.teacher_homework_going_listview);
         goingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView hid = findViewById(R.id.homework_item_id);
                 Intent intent = new Intent(Teacher_class_main.this,Teacher_homework_detail.class);
+                intent.putExtra("hid",hid.getText().toString());
                 startActivity(intent);
             }
         });
 
-        ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(Teacher_class_main.this,android.R.layout.simple_list_item_1,data);
-        ListView concludedListView = findViewById(R.id.teacher_homework_concluded_listview);
-        concludedListView.setAdapter(adapter3);
+        concludedAdapter = new HomeworkItemAdapter(Teacher_class_main.this,R.layout.homework_item, endlist);
+        concludedListView = findViewById(R.id.teacher_homework_concluded_listview);
         concludedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView hid = findViewById(R.id.homework_item_id);
                 Intent intent = new Intent(Teacher_class_main.this,Teacher_homework_check_main.class);
+                intent.putExtra("hid",hid.getText().toString());
                 startActivity(intent);
             }
         });
@@ -352,4 +371,58 @@ public class Teacher_class_main extends AppCompatActivity {
             classcover.setImageBitmap(bitmap);//将图片的流转换成图片
         }
     };
+
+    public void initHomework(String cid){
+        String url = "http://192.168.3.169:8079/homework/gethomeworks";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        FormBody.Builder formBody = new FormBody.Builder();
+        formBody.add("cid", cid);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody.build())
+                .build();
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                System.out.println("-------------------------Failed----------------------------");
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+//                message.setText(response.body().string());
+                String body = response.body().string();
+                listhomework(body);
+            }
+        });
+    }
+
+    public void listhomework(String json){
+        try {
+            JSONArray jsonArray = new JSONArray(json);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+                HomeworkItem h = new HomeworkItem(obj.getString("question"),obj.getString("hid"));
+                if ((obj.getString("status")).equals("dns")) {
+                    dnslist.add(h);
+                }else if((obj.getString("status")).equals("going")) {
+                    goinglist.add(h);
+                }else{
+                    endlist.add(h);
+                }
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dnsListView.setAdapter(dnsAdapter);
+                goingListView.setAdapter(goingAdapter);
+                concludedListView.setAdapter(concludedAdapter);
+            }
+        });
+    }
 }
