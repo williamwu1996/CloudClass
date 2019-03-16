@@ -138,6 +138,8 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
 //                message.setText(response.body().string());
                 String body = response.body().string();
                 initClassList(body);
+                System.out.println("-----------------------------------------------");
+                System.out.println(body);
             }
         });
 
@@ -326,10 +328,10 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
             for(int i=0;i<jsonArray.length();i++){
                 JSONObject obj = jsonArray.getJSONObject(i);
                 if((obj.getJSONObject("course").getString("teacher")).equals(id)) {
-                    ClassMain c = new ClassMain(url+obj.getJSONObject("course").getInt("cid")+".png", String.valueOf(obj.getJSONObject("course").getInt("cid")), "", obj.getJSONObject("course").getString("cname"), obj.getString("teacherName"), String.valueOf(obj.getJSONObject("course").getInt("cid")),obj.getJSONObject("course").getString("profile"));
+                    ClassMain c = new ClassMain(url+obj.getJSONObject("course").getInt("cid")+".png", String.valueOf(obj.getJSONObject("course").getInt("cid")), obj.getJSONObject("course").getString("classname"), obj.getJSONObject("course").getString("cname"), obj.getString("teacherName"), String.valueOf(obj.getJSONObject("course").getInt("cid")),obj.getJSONObject("course").getString("profile"));
                     classlist.add(c);
                 }else{
-                    ClassMain c = new ClassMain(url+obj.getJSONObject("course").getInt("cid")+".png", "", "", obj.getJSONObject("course").getString("cname"), obj.getString("teacherName"), String.valueOf(obj.getJSONObject("course").getInt("cid")),obj.getJSONObject("course").getString("profile"));
+                    ClassMain c = new ClassMain(url+obj.getJSONObject("course").getInt("cid")+".png", "", obj.getJSONObject("course").getString("classname"), obj.getJSONObject("course").getString("cname"), obj.getString("teacherName"), String.valueOf(obj.getJSONObject("course").getInt("cid")),obj.getJSONObject("course").getString("profile"));
                     classlist.add(c);
                 }
 
@@ -383,10 +385,18 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
                     editor.putString("phone", obj.getString("phone"));
                     editor.putString("gender", obj.getString("gender"));
                     editor.commit();
-                    personname.setText(sp.getString("personname",""));
+//                    personname.setText(sp.getString("personname",""));
                 }catch (Exception e){
                     e.printStackTrace();
                 }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+                        personname.setText(sp.getString("personname",""));
+                    }
+                });
             }
         });
     }

@@ -130,6 +130,7 @@ public class Student_class_main extends AppCompatActivity {
         String coursename = intent.getStringExtra("coursename");
         String teacher = intent.getStringExtra("teacher");
 
+
         tvteacher = findViewById(R.id.student_class_main_detail_teacher);
         tvcoursename = findViewById(R.id.student_class_main_detail_coursename);
         tvclassname = findViewById(R.id.student_class_main_detail_classname);
@@ -207,9 +208,18 @@ public class Student_class_main extends AppCompatActivity {
         goingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                 TextView hid = findViewById(R.id.homework_item_id);
+                TextView value = findViewById(R.id.homework_item_value);
+                TextView title = findViewById(R.id.homework_item_title);
+                TextView profile = findViewById(R.id.homework_item_profile);
+
                 Intent intent = new Intent(Student_class_main.this,Student_homework_answer_going.class);
                 intent.putExtra("hid",hid.getText().toString());
+                intent.putExtra("uid",sp.getString("userid",""));
+                intent.putExtra("value",value.getText().toString());
+                intent.putExtra("title",title.getText().toString());
+                intent.putExtra("profile",profile.getText().toString());
                 startActivity(intent);
             }
         });
@@ -218,9 +228,18 @@ public class Student_class_main extends AppCompatActivity {
         concludedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                 TextView hid = findViewById(R.id.homework_item_id);
+                TextView value = findViewById(R.id.homework_item_value);
+                TextView title = findViewById(R.id.homework_item_title);
+                TextView profile = findViewById(R.id.homework_item_profile);
+
                 Intent intent = new Intent(Student_class_main.this,Student_homework_answer_concluded.class);
                 intent.putExtra("hid",hid.getText().toString());
+                intent.putExtra("uid",sp.getString("userid",""));
+                intent.putExtra("value",value.getText().toString());
+                intent.putExtra("title",title.getText().toString());
+                intent.putExtra("profile",profile.getText().toString());
                 startActivity(intent);
             }
         });
@@ -323,14 +342,8 @@ public class Student_class_main extends AppCompatActivity {
             JSONArray jsonArray = new JSONArray(json);
             for(int i=0;i<jsonArray.length();i++){
                 JSONObject obj = jsonArray.getJSONObject(i);
-//                if((obj.getJSONObject("course").getString("teacher")).equals(id)) {
                     StudentMemberItem c = new StudentMemberItem(url+obj.getString("uid")+".JPG",obj.getString("name"));
                     memberlist.add(c);
-//                }else{
-//                    ClassMain c = new ClassMain(url+obj.getJSONObject("course").getInt("cid")+".png", "", "", obj.getJSONObject("course").getString("cname"), obj.getString("teacherName"), String.valueOf(obj.getJSONObject("course").getInt("cid")),obj.getJSONObject("course").getString("profile"));
-//                    classlist.add(c);
-//                }
-
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -387,10 +400,8 @@ public class Student_class_main extends AppCompatActivity {
                 System.out.println("-------------------------Failed----------------------------");
                 e.printStackTrace();
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-//                message.setText(response.body().string());
                 String body = response.body().string();
                 listhomework(body);
             }
@@ -402,7 +413,7 @@ public class Student_class_main extends AppCompatActivity {
             JSONArray jsonArray = new JSONArray(json);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
-                HomeworkItem h = new HomeworkItem(obj.getString("question"),obj.getString("hid"));
+                HomeworkItem h = new HomeworkItem(obj.getString("question"),obj.getString("hid"),obj.getString("value"),obj.getString("profile"));
                 if ((obj.getString("status")).equals("dns")) {
 
                 }else if((obj.getString("status")).equals("going")) {

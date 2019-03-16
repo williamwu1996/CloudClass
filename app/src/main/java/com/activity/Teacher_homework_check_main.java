@@ -7,13 +7,25 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.cloudclass.R;
 import com.cloudclass.StudentCheckinHistoryItem;
 import com.cloudclass.StudentCheckinHistoryItemAdapter;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class Teacher_homework_check_main extends Activity {
     private List<StudentCheckinHistoryItem> checkinlist = new ArrayList<>();
@@ -42,16 +54,67 @@ public class Teacher_homework_check_main extends Activity {
         homeworkListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(Teacher_homework_check_main.this,Teacher_homework_check_detail.class);
-                startActivity(intent);
+                TextView hrid = findViewById(R.id.student_checkin_history_id);
+                TextView score = findViewById(R.id.student_checkin_history_status);
+                if((score.getText().toString()).equals("未提交")){
+
+                }else {
+                    Intent intent = new Intent(Teacher_homework_check_main.this, Teacher_homework_check_detail.class);
+                    intent.putExtra("hrid", hrid.getText().toString());
+                    startActivity(intent);
+                }
             }
         });
     }
 
     public void initHomeworkList(){
-        for(int i = 0;i<13;i++) {
-            StudentCheckinHistoryItem sc1 = new StudentCheckinHistoryItem("吴玠璘", "0分");
-            checkinlist.add(sc1);
+        Intent intent = getIntent();
+        String hid = intent.getStringExtra("hid");
+        String url = "http://192.168.3.169:8079/homework/getresult";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        FormBody.Builder formBody = new FormBody.Builder();
+        formBody.add("hid",hid);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody.build())
+                .build();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            public void onFailure(Call call, IOException e) {
+
+            }
+            public void onResponse(Call call, Response response) throws IOException {
+                String body = response.body().string();
+                System.out.println("-------------------------");
+                System.out.println(body);
+                initUI(body);
+            }
+        });
+    }
+
+    public void initUI(String json){
+        try {
+            JSONArray jsonArray = new JSONArray(json);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+                String score;
+                if(obj.getJSONObject("homeworkresult").getInt("value")==-1){
+                    score = "未批改";
+                }else if(obj.getJSONObject("homeworkresult").getInt("value")==-2){
+                    score = "未提交";
+                }else{
+                    score = String.valueOf(obj.getJSONObject("homeworkresult").getInt("value"))+"分";
+                }
+                StudentCheckinHistoryItem h = new StudentCheckinHistoryItem(obj.getJSONObject("users").getString("name"),score,String.valueOf(obj.getJSONObject("homeworkresult").getInt("hrid")));
+                checkinlist.add(h);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                homeworkListView.setAdapter(homeworkAdapter);
+            }
+        });
     }
 }

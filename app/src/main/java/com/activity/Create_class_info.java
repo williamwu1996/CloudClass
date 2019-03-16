@@ -93,6 +93,7 @@ public class Create_class_info extends Activity implements View.OnClickListener 
                     formBody.add("uid", uid);
                     formBody.add("coursename", coursen);
                     formBody.add("profile", prof);
+                    formBody.add("classname", classn);
                     Request request = new Request.Builder()
                             .url(url)
                             .post(formBody.build())

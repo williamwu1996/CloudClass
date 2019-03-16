@@ -164,6 +164,8 @@ public class Teacher_edit_homework extends Activity {
             JSONObject obj = jsonArray.getJSONObject(0);
 //            System.out.println();
             title = obj.getString("question");
+            value = obj.getString("value");
+            profile = obj.getString("profile");
 //            tvtitle.setText(title);
         }catch (Exception e){
             e.printStackTrace();
@@ -173,6 +175,8 @@ public class Teacher_edit_homework extends Activity {
             @Override
             public void run() {
                 tvtitle.setText(title);
+                tvvalue.setText(value);
+                tvprofile.setText(profile);
             }
         });
     }

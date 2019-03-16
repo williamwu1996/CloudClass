@@ -42,7 +42,7 @@ public class Student_checkin extends Activity {
 
     public void initHistoryList(){
         for(int i = 0;i<13;i++) {
-            StudentCheckinHistoryItem sc1 = new StudentCheckinHistoryItem("2017-09-09 19:22", "已签到");
+            StudentCheckinHistoryItem sc1 = new StudentCheckinHistoryItem("2017-09-09 19:22", "已签到","111");
             checkinlist.add(sc1);
         }
     }

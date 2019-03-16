@@ -306,7 +306,6 @@ public class Teacher_class_main extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-//                message.setText(response.body().string());
                 String body = response.body().string();
                 System.out.println("--------------------------------Member List-------------------------------");
                 System.out.println(body);
@@ -324,14 +323,8 @@ public class Teacher_class_main extends AppCompatActivity {
             JSONArray jsonArray = new JSONArray(json);
             for(int i=0;i<jsonArray.length();i++){
                 JSONObject obj = jsonArray.getJSONObject(i);
-//                if((obj.getJSONObject("course").getString("teacher")).equals(id)) {
                 StudentMemberItem c = new StudentMemberItem(url+obj.getString("uid")+".JPG",obj.getString("name"));
                 memberlist.add(c);
-//                }else{
-//                    ClassMain c = new ClassMain(url+obj.getJSONObject("course").getInt("cid")+".png", "", "", obj.getJSONObject("course").getString("cname"), obj.getString("teacherName"), String.valueOf(obj.getJSONObject("course").getInt("cid")),obj.getJSONObject("course").getString("profile"));
-//                    classlist.add(c);
-//                }
-
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -403,7 +396,7 @@ public class Teacher_class_main extends AppCompatActivity {
             JSONArray jsonArray = new JSONArray(json);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
-                HomeworkItem h = new HomeworkItem(obj.getString("question"),obj.getString("hid"));
+                HomeworkItem h = new HomeworkItem(obj.getString("question"),obj.getString("hid"),obj.getString("value"),obj.getString("profile"));
                 if ((obj.getString("status")).equals("dns")) {
                     dnslist.add(h);
                 }else if((obj.getString("status")).equals("going")) {

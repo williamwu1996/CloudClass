@@ -28,10 +28,12 @@ public class StudentCheckinHistoryItemAdapter extends ArrayAdapter<StudentChecki
 
         TextView time = (TextView)view.findViewById(R.id.student_checkin_history_time);
         TextView status = (TextView)view.findViewById(R.id.student_checkin_history_status);
+        TextView id = (TextView)view.findViewById(R.id.student_checkin_history_id);
+
 
         status.setText(cm.getStatus());
         time.setText(cm.getTime());
-
+        id.setText(cm.getId());
 
         return view;
     }

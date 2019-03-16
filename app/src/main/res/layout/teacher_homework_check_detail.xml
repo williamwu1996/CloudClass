@@ -96,7 +96,8 @@
             android:id="@+id/teacher_homework_check_detail_score"
             android:layout_width="60dp"
             android:layout_height="match_parent"
-            android:background="@null" />
+            android:background="@color/colorwhite"
+            />
 
     </LinearLayout>
 

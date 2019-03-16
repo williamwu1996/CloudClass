@@ -22,5 +22,19 @@
             android:visibility="invisible"
             android:text="1" />
 
+        <TextView
+            android:id="@+id/homework_item_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:text="1" />
+
+        <TextView
+            android:id="@+id/homework_item_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:text="1" />
+
     </LinearLayout>
 </RelativeLayout>

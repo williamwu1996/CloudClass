@@ -64,7 +64,7 @@ public class Join_class_code extends Activity {
                                 JSONArray jsonArray = new JSONArray(json);
                                 JSONObject obj = jsonArray.getJSONObject(0);
                                 String teacher = obj.getString("teacherName");
-                                String classname = "";
+                                String classname = obj.getJSONObject("course").getString("classname");
                                 String coursename = obj.getJSONObject("course").getString("cname");
                                 Intent intent = new Intent(Join_class_code.this, Join_class_result.class);
                                 intent.putExtra("code", code.getText().toString());
