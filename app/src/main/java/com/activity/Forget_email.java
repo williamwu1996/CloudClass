@@ -3,11 +3,14 @@ package com.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.Util.CheckEmailAddr;
+import com.cloudclass.LoginActivity;
 import com.cloudclass.R;
 
 import java.io.IOException;
@@ -37,7 +40,7 @@ public class Forget_email extends Activity {
             @Override
             public void onClick(View arg0) {
                 //发送验证码
-                if((address.getText().toString()).equals("")){
+                if(!CheckEmailAddr.isEmail(address.getText().toString())){
                     showEmpty();
                 }else {
                     String url = "http://192.168.3.169:8079/users/emailCheck";
@@ -66,7 +69,9 @@ public class Forget_email extends Activity {
                                 finish();
                             } else {
                                 //不存在
-                                System.out.println("-----------------------------------不存在");
+                                Looper.prepare();
+                                Toast.makeText(Forget_email.this, "邮箱未被注册", Toast.LENGTH_SHORT).show();
+                                Looper.loop();
                             }
                         }
                     });
@@ -85,6 +90,6 @@ public class Forget_email extends Activity {
 
 
     public void showEmpty(){
-        Toast.makeText(this,"地址不能为空",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,"邮箱地址不合法",Toast.LENGTH_SHORT).show();
     }
 }

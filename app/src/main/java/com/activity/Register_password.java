@@ -3,6 +3,7 @@ package com.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,9 +37,6 @@ public class Register_password extends Activity {
         cancel = findViewById(R.id.register_password_cancel);
 
         Intent intent = getIntent();
-        System.out.println("----------------------------------");
-        System.out.println(intent.getStringExtra("address"));
-        System.out.println("----------------------------------");
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -54,6 +52,7 @@ public class Register_password extends Activity {
                         String address = intent.getStringExtra("address");
                         String pass = password.getText().toString();
                         register(address, pass);
+                        Toast.makeText(Register_password.this, "注册成功", Toast.LENGTH_SHORT).show();
                         finish();
                     } else {
                         Toast.makeText(Register_password.this, "密码不一致", Toast.LENGTH_LONG).show();

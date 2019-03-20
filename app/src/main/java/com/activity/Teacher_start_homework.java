@@ -3,9 +3,11 @@ package com.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cloudclass.R;
 
@@ -89,7 +91,10 @@ public class Teacher_start_homework extends Activity {
 
             }
             public void onResponse(Call call, Response response) throws IOException {
+                Looper.prepare();
+                Toast.makeText(Teacher_start_homework.this, "作业添加成功", Toast.LENGTH_SHORT).show();
                 finish();
+                Looper.loop();
             }
         });
     }

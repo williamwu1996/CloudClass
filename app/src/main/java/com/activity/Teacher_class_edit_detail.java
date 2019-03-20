@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -381,7 +382,10 @@ public class Teacher_class_edit_detail extends Activity implements View.OnClickL
                     String cid = tvclasscode.getText().toString();
                     updateCover(cid);
                 }else {
+                    Looper.prepare();
+                    Toast.makeText(Teacher_class_edit_detail.this, "修改成功", Toast.LENGTH_SHORT).show();
                     finish();
+                    Looper.loop();
                 }
             }
         });
@@ -401,8 +405,10 @@ public class Teacher_class_edit_detail extends Activity implements View.OnClickL
                     .build();
             Response response=client.newCall(request).execute();
             String responseBody=response.body().string();
-            System.out.println("---------------uploadpic response----------------------"+responseBody);
+            Looper.prepare();
+            Toast.makeText(Teacher_class_edit_detail.this, "修改成功", Toast.LENGTH_SHORT).show();
             finish();
+            Looper.loop();
         } catch (IOException e) {
             e.printStackTrace();
         }

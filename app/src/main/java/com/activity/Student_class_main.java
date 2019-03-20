@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -24,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cloudclass.HomeworkItem;
 import com.cloudclass.HomeworkItemAdapter;
@@ -315,7 +317,10 @@ public class Student_class_main extends AppCompatActivity {
 
             }
             public void onResponse(Call call, Response response) throws IOException {
+                Looper.prepare();
+                Toast.makeText(Student_class_main.this, "退出成功", Toast.LENGTH_SHORT).show();
                 finish();
+                Looper.loop();
             }
         });
     }

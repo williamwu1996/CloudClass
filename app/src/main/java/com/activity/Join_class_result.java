@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cloudclass.R;
 
@@ -72,7 +74,10 @@ public class Join_class_result extends Activity {
                         String json = response.body().string();
                         //需要测试没有的情况
                         System.out.println("Join class result :"+json);
+                        Looper.prepare();
+                        Toast.makeText(Join_class_result.this, "加入成功", Toast.LENGTH_SHORT).show();
                         finish();
+                        Looper.loop();
                     }
                 });
             }
@@ -81,7 +86,6 @@ public class Join_class_result extends Activity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                //创建班课
                 finish();
             }
         });

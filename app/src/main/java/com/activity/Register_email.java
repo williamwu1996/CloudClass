@@ -3,11 +3,13 @@ package com.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.Util.CheckEmailAddr;
 import com.cloudclass.R;
 
 import java.io.IOException;
@@ -37,7 +39,9 @@ public class Register_email extends Activity {
 
             @Override
             public void onClick(View arg0) {
-                if((address.getText().toString()).equals("")){
+                System.out.println("---------------------------------------");
+                System.out.println(CheckEmailAddr.isEmail(address.getText().toString()));
+                if(!CheckEmailAddr.isEmail(address.getText().toString())){
                     showEmpty();
                 }else {
                     String url = "http://192.168.3.169:8079/users/emailCheck";
@@ -64,7 +68,9 @@ public class Register_email extends Activity {
                                 startActivity(intent);
                                 finish();
                             } else {
-                                showDuplicate();
+                                Looper.prepare();
+                                Toast.makeText(Register_email.this, "邮箱已被注册", Toast.LENGTH_SHORT).show();
+                                Looper.loop();
                             }
                         }
                     });
@@ -81,12 +87,9 @@ public class Register_email extends Activity {
         });
     }
 
-    public void showDuplicate(){
-        Toast.makeText(this,"此邮箱已经被注册！",Toast.LENGTH_SHORT).show();
-    }
 
     public void showEmpty(){
-        Toast.makeText(this,"地址不能为空",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,"邮箱地址不合法",Toast.LENGTH_SHORT).show();
     }
 
 }

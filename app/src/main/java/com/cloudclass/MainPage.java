@@ -297,7 +297,6 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
 
                 Intent intent = new Intent(MainPage.this,Create_class_info.class);
                 startActivity(intent);
-                Toast.makeText(this,"clicked add class",Toast.LENGTH_SHORT).show();
                 mPopWindow.dismiss();
             }
             break;
@@ -305,8 +304,6 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
                 //切换界面
                 Intent intent = new Intent(MainPage.this,Join_class_code.class);
                 startActivity(intent);
-
-                Toast.makeText(this,"clicked join class",Toast.LENGTH_SHORT).show();
                 mPopWindow.dismiss();
             }
             break;

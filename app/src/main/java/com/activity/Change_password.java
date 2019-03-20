@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -94,7 +95,10 @@ public class Change_password extends Activity {
 
             }
             public void onResponse(Call call, Response response) throws IOException {
+                Looper.prepare();
+                Toast.makeText(Change_password.this, "修改成功", Toast.LENGTH_SHORT).show();
                 finishUpdate();
+                Looper.loop();
             }
         });
     }

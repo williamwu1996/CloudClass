@@ -3,6 +3,7 @@ package com.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,8 +55,7 @@ public class Register_validation_code extends Activity {
                     startActivity(intent);
                     finish();
                 }else{
-//                    Toast.makeText(this,"验证码错误，请重新输入",Toast.LENGTH_SHORT).show();
-                    System.out.println("验证码错误！");
+                    Toast.makeText(Register_validation_code.this, "验证码错误", Toast.LENGTH_SHORT).show();
                 }
             }
         });

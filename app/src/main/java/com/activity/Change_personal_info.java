@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -260,7 +261,10 @@ public class Change_personal_info extends Activity implements View.OnClickListen
                         SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                         String userid = sp.getString("userid","");
                         if(imgFile==null){
+                            Looper.prepare();
+                            Toast.makeText(Change_personal_info.this, "修改成功", 1).show();
                             finish();
+                            Looper.loop();
                         }else {
                             updatepic("\\head_pic\\" + userid + ".JPG");
                         }
@@ -286,8 +290,10 @@ public class Change_personal_info extends Activity implements View.OnClickListen
                     .build();
             Response response=client.newCall(request).execute();
             String responseBody=response.body().string();
-            System.out.println("---------------uploadpic response----------------------"+responseBody);
+            Looper.prepare();
+            Toast.makeText(Change_personal_info.this, "修改成功", 1).show();
             finish();
+            Looper.loop();
         } catch (IOException e) {
             e.printStackTrace();
         }

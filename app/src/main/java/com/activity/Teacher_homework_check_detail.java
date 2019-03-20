@@ -3,6 +3,7 @@ package com.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -139,7 +140,10 @@ public class Teacher_homework_check_detail extends Activity {
 
             }
             public void onResponse(Call call, Response response) throws IOException {
+                Looper.prepare();
+                Toast.makeText(Teacher_homework_check_detail.this, "批改成功", Toast.LENGTH_SHORT).show();
                 finish();
+                Looper.loop();
             }
         });
     }

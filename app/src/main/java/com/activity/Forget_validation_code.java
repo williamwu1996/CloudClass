@@ -3,10 +3,12 @@ package com.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cloudclass.R;
 
@@ -51,8 +53,7 @@ public class Forget_validation_code extends Activity {
                     startActivity(intent);
                     finish();
                 }else{
-//                    Toast.makeText(this,"验证码错误，请重新输入",Toast.LENGTH_SHORT).show();
-                    System.out.println("验证码错误！");
+                    Toast.makeText(Forget_validation_code.this, "验证码错误", Toast.LENGTH_SHORT).show();
                 }
 
             }

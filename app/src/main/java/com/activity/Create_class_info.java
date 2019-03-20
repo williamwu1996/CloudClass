@@ -80,7 +80,7 @@ public class Create_class_info extends Activity implements View.OnClickListener 
             public void onClick(View arg0) {
                 //创建班课,还有个图片
                 if(imgFile==null){
-                    System.out.println("请选择一张图片");
+                    Toast.makeText(Create_class_info.this,"请选择一张图片作为封面",Toast.LENGTH_SHORT).show();
                 }else {
                     SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);//Context.MODE_PRIVATE表示SharePrefences的数据只有自己应用程序能访问。
                     String coursen = coursename.getText().toString();
@@ -88,12 +88,14 @@ public class Create_class_info extends Activity implements View.OnClickListener 
                     String prof = profile.getText().toString();
                     String classn = classname.getText().toString();
                     String url = "http://192.168.3.169:8079/course/create";
+                    String personname = sp.getString("personname","");
                     OkHttpClient okHttpClient = new OkHttpClient();
                     FormBody.Builder formBody = new FormBody.Builder();
                     formBody.add("uid", uid);
                     formBody.add("coursename", coursen);
                     formBody.add("profile", prof);
                     formBody.add("classname", classn);
+                    formBody.add("personname", personname);
                     Request request = new Request.Builder()
                             .url(url)
                             .post(formBody.build())

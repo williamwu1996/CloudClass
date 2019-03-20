@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -76,7 +77,6 @@ public class LoginActivity extends Activity {
                     userPwd = edt_password.getText().toString();
                     System.out.println("username:"+userName);
                     System.out.println("password"+userPwd);
-                    final String[] status = {""};
                     String url = "http://192.168.3.169:8079/users/login";
                     OkHttpClient okHttpClient = new OkHttpClient();
                     FormBody.Builder formBody = new FormBody.Builder();
@@ -104,15 +104,18 @@ public class LoginActivity extends Activity {
                                     editor.putString("userid", jsonArray.get(0).toString());
                                     editor.putString("userid", jsonArray.get(0).toString());
                                     editor.commit();
+                                    Looper.prepare();
+                                    Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+
                                     UserManage.getInstance().saveUserInfo(LoginActivity.this, userName, userPwd);
                                     Intent intent = new Intent(LoginActivity.this, MainPage.class);//跳转到主页
                                     startActivity(intent);
+                                    Looper.loop();
                                     finish();
-
                                 } else {
-                                    System.out.println("---------------------");
-                                    System.out.println("用户名密码错误");
-                                    System.out.println("----------------------");
+                                    Looper.prepare();
+                                    Toast.makeText(LoginActivity.this, "用户名密码错误", Toast.LENGTH_SHORT).show();
+                                    Looper.loop();
                                 }
                             }catch (Exception e){
                                 e.printStackTrace();
