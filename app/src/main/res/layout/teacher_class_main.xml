@@ -106,7 +106,8 @@
         <ListView
             android:id="@+id/teacher_main_resource_listview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_marginBottom="55dp"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
 
@@ -155,6 +156,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:gravity="center"
+            android:background="@android:color/transparent"
+            android:textColor="@color/title_bg"
             android:text="发起签到"
             android:clickable="true"/>
 
@@ -170,7 +173,8 @@
         <ListView
             android:id="@+id/teacher_class_main_members_listview"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="55dp"/>
 
     </LinearLayout>
 

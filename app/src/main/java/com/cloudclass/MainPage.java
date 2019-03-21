@@ -28,6 +28,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.Util.ChatServerConnection;
 import com.activity.Change_password;
 import com.activity.Change_personal_info;
 import com.activity.Create_class_info;
@@ -105,7 +106,7 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
             return false;
         }
     };
-
+    String t;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,33 +116,9 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
         personname = findViewById(R.id.me_personname);
 
         SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-        String t = sp.getString("userid","");
+        t = sp.getString("userid","");
 
-        String url = "http://192.168.3.169:8079/course/getallclass";
-        OkHttpClient okHttpClient = new OkHttpClient();
-        FormBody.Builder formBody = new FormBody.Builder();
-        formBody.add("uid", t);
-        Request request = new Request.Builder()
-                .url(url)
-                .post(formBody.build())
-                .build();
-        Call call = okHttpClient.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                System.out.println("-------------------------Failed----------------------------");
-                e.printStackTrace();
-            }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-//                message.setText(response.body().string());
-                String body = response.body().string();
-                initClassList(body);
-                System.out.println("-----------------------------------------------");
-                System.out.println(body);
-            }
-        });
 
         initHeadpic(t);
         initPerson(t);
@@ -162,6 +139,8 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
                 editor.putString("PASSWORD","");
                 editor.putString("userid","");
                 editor.commit();
+                //todo openfire注释
+//                ChatServerConnection.closeConnection();
                 Intent intent = new Intent(MainPage.this,LoginActivity.class);
                 startActivity(intent);
                 finish();
@@ -249,6 +228,34 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
+    public void getAllClass(){
+        String url = "http://192.168.3.169:8079/course/getallclass";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        FormBody.Builder formBody = new FormBody.Builder();
+        formBody.add("uid", t);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody.build())
+                .build();
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                System.out.println("-------------------------Failed----------------------------");
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+//                message.setText(response.body().string());
+                String body = response.body().string();
+                initClassList(body);
+                System.out.println("-----------------------------------------------");
+                System.out.println(body);
+            }
+        });
+    }
+
     private void showPopupWindow() {
         //设置contentView
         View contentView = LayoutInflater.from(MainPage.this).inflate(R.layout.addclass_popup, null);
@@ -309,6 +316,10 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
             break;
             case R.id.pop_cancel:{
                 //切换界面
+//                Intent intent=new Intent(this, MainPage.class);
+//                startActivity(intent);
+//                finish();//关闭自己
+//                overridePendingTransition(0, 0);
                 mPopWindow.dismiss();
             }
             break;
@@ -319,6 +330,7 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
     private void initClassList(final String json){
         SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         String id =  sp.getString("userid","");
+        classlist.clear();
         try{
             String url = "http://129.204.207.18:8079/resource/img/cover/";
             JSONArray jsonArray = new JSONArray(json);
@@ -345,6 +357,8 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
     }
 
     private void initMessageList(){
+
+        messagelist.clear();
         MessageMain a = new MessageMain(R.drawable.timg,"Java04","19-2-20 17:02","Williamwu","Hi, how are you?");
         messagelist.add(a);
         MessageMain b = new MessageMain(R.drawable.timg,"Java03","19-2-10 10:58","Williamwu","Nice to meet you");
@@ -425,5 +439,13 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
             headpic.setImageBitmap(bitmap);//将图片的流转换成图片
         }
     };
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initHeadpic(t);
+        initPerson(t);
+        initMessageList();
+        getAllClass();
+    }
 
 }

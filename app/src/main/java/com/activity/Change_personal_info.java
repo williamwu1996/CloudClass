@@ -291,8 +291,9 @@ public class Change_personal_info extends Activity implements View.OnClickListen
             Response response=client.newCall(request).execute();
             String responseBody=response.body().string();
             Looper.prepare();
-            Toast.makeText(Change_personal_info.this, "修改成功", 1).show();
-            finish();
+            Toast.makeText(Change_personal_info.this, "修改成功", Toast.LENGTH_SHORT).show();
+//            finish();
+//            back();
             Looper.loop();
         } catch (IOException e) {
             e.printStackTrace();

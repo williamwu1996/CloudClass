@@ -384,6 +384,11 @@ public class Teacher_class_edit_detail extends Activity implements View.OnClickL
                 }else {
                     Looper.prepare();
                     Toast.makeText(Teacher_class_edit_detail.this, "修改成功", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent();
+                    intent.putExtra("classname",etclassname.getText().toString());
+                    intent.putExtra("coursename",etcoursename.getText().toString());
+                    intent.putExtra("profile",etprofile.getText().toString());
+                    setResult(2, intent);
                     finish();
                     Looper.loop();
                 }

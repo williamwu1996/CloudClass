@@ -8,6 +8,6 @@
     <ListView
         android:id="@+id/student_class_main_homework_concluded_listview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="400dp"/>
 
 </LinearLayout>

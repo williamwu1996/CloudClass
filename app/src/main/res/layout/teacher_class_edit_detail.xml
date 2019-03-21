@@ -56,6 +56,12 @@
         android:clickable="true"
         android:src="@drawable/timg"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:text="轻触封面以更改"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

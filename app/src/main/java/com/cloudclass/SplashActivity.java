@@ -9,6 +9,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.WindowManager;
 
+import com.Util.ChatServerConnection;
+
 import org.json.JSONArray;
 
 import java.io.IOException;
@@ -37,6 +39,8 @@ public class SplashActivity extends Activity {
                     finish();
                     break;
                 case GO_LOGIN://去登录页
+                    //todo admin身份登录openfire
+//                    ChatServerConnection.login("admin","admin");
                     Intent intent2 = new Intent(SplashActivity.this, LoginActivity.class);
                     startActivity(intent2);
                     finish();
@@ -44,15 +48,16 @@ public class SplashActivity extends Activity {
             }
         }
     };
-
+    UserInfo userinfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         UserManage um = new UserManage();
-
-        UserInfo userinfo = um.getUserInfo(this);
+        //todo of注释
+//        ChatServerConnection.closeConnection();
+        userinfo = um.getUserInfo(this);
         if(userinfo!=null) {
             String email = userinfo.getUserName();
             String password = userinfo.getPassword();
@@ -78,10 +83,14 @@ public class SplashActivity extends Activity {
                     try {
                         JSONArray jsonArray = new JSONArray(result);
                         if ((jsonArray.get(1).toString()).equals("true")) {
+                            String email = userinfo.getUserName();
+                            String password = userinfo.getPassword();
                             SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = sp.edit();
                             editor.putString("userid", jsonArray.get(0).toString());
                             editor.commit();
+                            //todo 用户身份登录openfire
+//                            ChatServerConnection.login(email,password);
                             mHandler.sendEmptyMessageDelayed(GO_HOME, 2000);
                         } else {
                             mHandler.sendEmptyMessageDelayed(GO_LOGIN, 2000);
@@ -95,26 +104,6 @@ public class SplashActivity extends Activity {
         }else{
             mHandler.sendEmptyMessageAtTime(GO_LOGIN, 2000);
         }
-
-
-
-
-        //判断，将sharePreference里的数据发送至服务器做验证，若成功则跳入主页
-
-//        if (UserManage.getInstance().validate(this))//自动登录判断，SharePrefences中有数据，则跳转到主页，没数据则跳转到登录页
-//        {
-//            mHandler.sendEmptyMessageDelayed(GO_HOME, 2000);
-//        } else {
-//            mHandler.sendEmptyMessageAtTime(GO_LOGIN, 2000);
-//        }
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                Intent intent1=new Intent(SplashActivity.this,MainPage.class);
-//                startActivity(intent1);
-//                SplashActivity.this.finish();
-//            }
-//        },3000);
 
     }
 

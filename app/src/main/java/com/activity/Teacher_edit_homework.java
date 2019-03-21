@@ -106,7 +106,7 @@ public class Teacher_edit_homework extends Activity {
     public void updatehomework(String status){
         Intent intent = getIntent();
         String hid = intent.getStringExtra("hid");
-        String url = "http://192.168.3.169:8079/homework/gethomeworkbyid";
+        String url = "http://192.168.3.169:8079/homework/updateInfo";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("hid", hid);

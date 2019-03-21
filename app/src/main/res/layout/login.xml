@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/loginbg"
+    android:background="@drawable/timg3"
     tools:context=".LoginActivity"
     >
 
@@ -31,6 +31,7 @@
 
     <Button
         android:id="@+id/btn_login"
+        android:background="@drawable/loginbutton"
         android:layout_width="350dp"
         android:layout_gravity="center_horizontal"
         android:layout_height="wrap_content"

@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.Util.ChatServerConnection;
 import com.cloudclass.R;
 
 import java.io.IOException;
@@ -71,7 +72,7 @@ public class Register_password extends Activity {
         });
     }
 
-    public void register(String address,String password){
+    public void register(final String address, final String password){
         String url = "http://192.168.3.169:8079/users/register";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
@@ -91,10 +92,8 @@ public class Register_password extends Activity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
 //                message.setText(response.body().string());
-                //成功true，不成功false
-                System.out.println("---------------------------");
-                System.out.println(response.body().string());
-                System.out.println("---------------------------");
+                //todo openfire注释，缺少分组
+//                ChatServerConnection.registerUser(address, password);
             }
         });
 

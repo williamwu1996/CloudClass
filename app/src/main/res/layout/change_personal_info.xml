@@ -54,6 +54,13 @@
         android:clickable="true"
         android:src="@drawable/timg"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:text="轻触头像以更改"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:background="@color/colorwhite"
@@ -188,7 +195,7 @@
             android:layout_marginRight="10dp"
             android:background="@null"
             android:singleLine="true"
-            android:src="@drawable/back"
+            android:src="@drawable/correct"
             />
     </RelativeLayout>
 
@@ -224,7 +231,7 @@
             android:layout_marginRight="10dp"
             android:background="@null"
             android:singleLine="true"
-            android:src="@drawable/back"
+            android:src="@drawable/correct"
             android:visibility="invisible"
             />
     </RelativeLayout>

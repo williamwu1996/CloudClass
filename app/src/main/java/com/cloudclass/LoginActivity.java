@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Looper;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,13 +35,14 @@ public class LoginActivity extends Activity {
     private TextView forget;
     String userName;
     String userPwd;
-
+    Button l;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         initViews();
-
+        l = findViewById(R.id.btn_login);
+        l.getBackground().setAlpha(70);
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -73,6 +75,7 @@ public class LoginActivity extends Activity {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.btn_login://登录
+
                     userName = edt_username.getText().toString();
                     userPwd = edt_password.getText().toString();
                     System.out.println("username:"+userName);
@@ -108,6 +111,7 @@ public class LoginActivity extends Activity {
                                     Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
 
                                     UserManage.getInstance().saveUserInfo(LoginActivity.this, userName, userPwd);
+                                    //todo 以用户身份登录openfire
                                     Intent intent = new Intent(LoginActivity.this, MainPage.class);//跳转到主页
                                     startActivity(intent);
                                     Looper.loop();

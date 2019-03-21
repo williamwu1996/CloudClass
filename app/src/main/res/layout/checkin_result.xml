@@ -50,5 +50,5 @@
     <ListView
         android:id="@+id/checkin_result_listview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="460dp"/>
 </LinearLayout>

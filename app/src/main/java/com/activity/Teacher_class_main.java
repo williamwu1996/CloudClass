@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cloudclass.HomeworkItem;
 import com.cloudclass.HomeworkItemAdapter;
@@ -73,6 +74,8 @@ public class Teacher_class_main extends AppCompatActivity {
     ImageView classcover;
     TextView tvclassname, tvcoursename, tvteacher, tvprofile, tvclasscode;
 
+    String cid;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -121,7 +124,7 @@ public class Teacher_class_main extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.teacher_class_main);
         Intent intent = getIntent();
-        String cid = intent.getStringExtra("cid");
+        cid = intent.getStringExtra("cid");
         String uid = intent.getStringExtra("uid");
         String profile = intent.getStringExtra("profile");
         String classname = intent.getStringExtra("classname");
@@ -141,7 +144,6 @@ public class Teacher_class_main extends AppCompatActivity {
         tvprofile.setText(profile);
         tvclasscode.setText(cid);
         initClasscover(cid);
-//        initMemberList();
 
         title = findViewById(R.id.teacher_class_title);
         title.setText(coursename);
@@ -190,6 +192,8 @@ public class Teacher_class_main extends AppCompatActivity {
             }
         });
 
+
+
         editDetail = findViewById(R.id.teacher_class_main_detail_edit_button);
         editDetail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -207,13 +211,31 @@ public class Teacher_class_main extends AppCompatActivity {
                 intent1.putExtra("classname",classname);
                 intent1.putExtra("coursename",coursename);
                 intent1.putExtra("teacher",teacher);
-                startActivity(intent1);
+//                startActivity(intent1);
+                startActivityForResult(intent1,1);
             }
         });
 
+
+
         memberAdapter = new StudentMemberItemAdapter(memberlist);
         memberListView = findViewById(R.id.teacher_class_main_members_listview);
-//        memberListView.setAdapter(memberAdapter);
+        //todo openfire
+//        memberListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+//                                    long arg3) {
+//                String temp= (String) ((TextView)arg1).getText();
+//                Intent intent = new Intent();
+//                intent.putExtra("chatuser",temp+"@129.204.207.18");
+//                intent.setClass(Teacher_class_main.this, ChatRoom.class);
+//                startActivity(intent);
+//                Toast.makeText(getApplicationContext(),
+//                        "Chat with " + temp,
+//                        Toast.LENGTH_SHORT).show();
+//                memberAdapter.notifyDataSetChanged();
+//            }
+//        });
 
         tabHost = (TabHost) findViewById(R.id.teacher_class_main_homework_page);
         tabHost.setup();
@@ -288,6 +310,52 @@ public class Teacher_class_main extends AppCompatActivity {
             }
         });
 
+        getStudents();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if(requestCode == 1)
+        {
+            if(resultCode == RESULT_CANCELED)
+            {
+//                text2.setText("点击了返回");
+//                Toast.makeText(this,"点击了返回",Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                if (data != null)
+                {
+//                    text2.setText("得到第二个activity返回的结果:\n"+data.getAction());
+//                    Toast.makeText(this,data.getAction(),Toast.LENGTH_LONG).show();
+                    System.out.println("---------------------------------");
+                    tvclassname.setText(data.getStringExtra("classname"));
+                    tvcoursename.setText(data.getStringExtra("coursename"));
+                    tvprofile.setText(data.getStringExtra("profile"));
+                }
+            }
+        }
+        if(requestCode == 2)
+        {
+            if(resultCode == RESULT_CANCELED)
+            {
+//                text2.setText("点击了返回");
+//                Toast.makeText(this,"点击了返回",Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                if (data != null)
+                {
+                    tvclassname.setText(data.getStringExtra("classname"));
+                    tvcoursename.setText(data.getStringExtra("coursename"));
+                    tvprofile.setText(data.getStringExtra("profile"));
+                }
+            }
+        }
+    }
+
+    public void getStudents(){
         String url = "http://192.168.3.169:8079/course/getstudents";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
@@ -393,6 +461,9 @@ public class Teacher_class_main extends AppCompatActivity {
 
     public void listhomework(String json){
         try {
+            dnslist.clear();
+            goinglist.clear();
+            endlist.clear();
             JSONArray jsonArray = new JSONArray(json);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
@@ -417,5 +488,13 @@ public class Teacher_class_main extends AppCompatActivity {
                 concludedListView.setAdapter(concludedAdapter);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        getStudents();
+        initHomework(cid);
+        initClasscover(cid);
     }
 }

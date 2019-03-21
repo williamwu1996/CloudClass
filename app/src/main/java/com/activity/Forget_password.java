@@ -92,9 +92,13 @@ public class Forget_password extends Activity {
             public void onResponse(Call call, Response response) throws IOException {
 //                message.setText(response.body().string());
                 //成功true，不成功false
-                System.out.println("---------------------------");
-                System.out.println(response.body().string());
-                System.out.println("---------------------------");
+                String result = response.body().string();
+                if(result.equals("true")){
+                    //todo openfire更改密码
+
+                }else{
+
+                }
             }
         });
 
