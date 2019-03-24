@@ -315,11 +315,11 @@ public class Teacher_class_edit_detail extends Activity implements View.OnClickL
         } else { // 从相册中选择，那么裁剪的图片保存在take_photo中
             String time = new SimpleDateFormat("yyyyMMddHHmmss", Locale.CHINA).format(new Date());
             String fileName = "photo_" + time;
-            File mCutFile = new File(Environment.getExternalStorageDirectory() + "/take_photo", fileName + ".jpeg");
-            if (!mCutFile.getParentFile().exists()) {
-                mCutFile.getParentFile().mkdirs();
+            imgFile = new File(Environment.getExternalStorageDirectory() + "/take_photo", fileName + ".jpeg");
+            if (!imgFile.getParentFile().exists()) {
+                imgFile.getParentFile().mkdirs();
             }
-            mCutUri = getUriForFile(this, mCutFile);
+            mCutUri = getUriForFile(this, imgFile);
         }
         intent.putExtra(MediaStore.EXTRA_OUTPUT, mCutUri);
         Toast.makeText(this, "剪裁图片", Toast.LENGTH_SHORT).show();

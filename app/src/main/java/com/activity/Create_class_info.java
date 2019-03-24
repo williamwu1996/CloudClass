@@ -79,9 +79,7 @@ public class Create_class_info extends Activity implements View.OnClickListener 
             @Override
             public void onClick(View arg0) {
                 //创建班课,还有个图片
-                if(imgFile==null){
-                    Toast.makeText(Create_class_info.this,"请选择一张图片作为封面",Toast.LENGTH_SHORT).show();
-                }else {
+                //如果imgFile==null，则
                     SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);//Context.MODE_PRIVATE表示SharePrefences的数据只有自己应用程序能访问。
                     String coursen = coursename.getText().toString();
                     String uid = sp.getString("userid", "");
@@ -117,10 +115,13 @@ public class Create_class_info extends Activity implements View.OnClickListener 
                             Intent intent = new Intent(Create_class_info.this,Create_class_success.class);
                             intent.putExtra("cid",body);
                             startActivity(intent);
-//                            updateCover();
+                            if(imgFile==null){
+                                updatedefaultcover(body);
+                            }else{
+                                updatecover("\\cover\\" + body + ".JPG");
+                            }
                         }
                     });
-                }
 
 
 
@@ -130,7 +131,6 @@ public class Create_class_info extends Activity implements View.OnClickListener 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                //创建班课
                 finish();
             }
         });
@@ -140,6 +140,25 @@ public class Create_class_info extends Activity implements View.OnClickListener 
             @Override
             public void onClick(View arg0) {
                 showPopupWindow();
+            }
+        });
+    }
+
+    public void updatedefaultcover(String cid){
+        String url = "http://192.168.3.169:8079/resource/createdefaultcover";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        FormBody.Builder formBody = new FormBody.Builder();
+        formBody.add("cid",cid);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody.build())
+                .build();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            public void onFailure(Call call, IOException e) {
+
+            }
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
             }
         });
     }
@@ -360,11 +379,11 @@ public class Create_class_info extends Activity implements View.OnClickListener 
         } else { // 从相册中选择，那么裁剪的图片保存在take_photo中
             String time = new SimpleDateFormat("yyyyMMddHHmmss", Locale.CHINA).format(new Date());
             String fileName = "photo_" + time;
-            File mCutFile = new File(Environment.getExternalStorageDirectory() + "/take_photo", fileName + ".jpeg");
-            if (!mCutFile.getParentFile().exists()) {
-                mCutFile.getParentFile().mkdirs();
+            imgFile = new File(Environment.getExternalStorageDirectory() + "/take_photo", fileName + ".jpeg");
+            if (!imgFile.getParentFile().exists()) {
+                imgFile.getParentFile().mkdirs();
             }
-            mCutUri = getUriForFile(this, mCutFile);
+            mCutUri = getUriForFile(this, imgFile);
         }
         intent.putExtra(MediaStore.EXTRA_OUTPUT, mCutUri);
         Toast.makeText(this, "剪裁图片", Toast.LENGTH_SHORT).show();

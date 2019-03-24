@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".LoginActivity"
+    android:background="@color/colorlightgray"
+    >
+
+    <LinearLayout
+        android:id="@+id/class_linear"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/title_bg"
+        >
+
+        <Button
+            android:id="@+id/teacher_checkin_code_back"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:textSize="17sp"
+            android:background="@drawable/back"
+            android:textColor="@color/colorwhite"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_marginLeft="40dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="班课"
+            android:textSize="24sp"
+            android:textColor="@color/colorwhite"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:text="Edit"
+            android:visibility="invisible"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="请输入签到码"
+        android:textColor="#000000"
+        android:textSize="25sp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:gravity="center_horizontal">
+
+        <EditText
+            android:id="@+id/teacher_checkin_code1"
+            android:layout_width="40dp"
+            android:layout_height="60dp"
+            android:textAlignment="center"
+            android:textSize="30dp"
+            android:maxLength="1"
+            android:text=""/>
+
+        <EditText
+            android:id="@+id/teacher_checkin_code2"
+            android:layout_width="40dp"
+            android:layout_height="60dp"
+            android:textAlignment="center"
+            android:textSize="30dp"
+            android:maxLength="1"
+            android:text=""/>
+
+        <EditText
+            android:id="@+id/teacher_checkin_code3"
+            android:layout_width="40dp"
+            android:layout_height="60dp"
+            android:textAlignment="center"
+            android:textSize="30dp"
+            android:maxLength="1"
+            android:text=""/>
+
+        <EditText
+            android:id="@+id/teacher_checkin_code4"
+            android:layout_width="40dp"
+            android:layout_height="60dp"
+            android:textAlignment="center"
+            android:textSize="30dp"
+            android:maxLength="1"
+            android:text=""/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/teacher_checkin_code_reset"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:text="重置"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"/>
+
+</LinearLayout>

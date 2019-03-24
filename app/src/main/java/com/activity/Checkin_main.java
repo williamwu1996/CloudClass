@@ -36,8 +36,10 @@ public class Checkin_main extends Activity {
             @Override
             public void onClick(View v) {
                 //进入开始签到页
-                Intent intent = new Intent(Checkin_main.this,Checkin_going.class);
-                startActivity(intent);
+//                Intent intent = new Intent(Checkin_main.this,Checkin_going.class);
+//                startActivity(intent);
+                Intent i = new Intent(Checkin_main.this,Teacher_checkin_code.class);
+                startActivity(i);
             }
         });
 

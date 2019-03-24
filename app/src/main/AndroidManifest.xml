@@ -178,6 +178,18 @@
             android:label="@string/app_name">
         </activity>
 
+        <activity
+            android:name="com.activity.Teacher_checkin_code"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="com.activity.Student_checkin_code"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            android:label="@string/app_name">
+        </activity>
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.rain.takephotodemo.FileProvider"

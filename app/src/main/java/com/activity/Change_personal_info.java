@@ -262,7 +262,7 @@ public class Change_personal_info extends Activity implements View.OnClickListen
                         String userid = sp.getString("userid","");
                         if(imgFile==null){
                             Looper.prepare();
-                            Toast.makeText(Change_personal_info.this, "修改成功", 1).show();
+                            Toast.makeText(Change_personal_info.this, "修改成功", Toast.LENGTH_SHORT).show();
                             finish();
                             Looper.loop();
                         }else {
@@ -292,8 +292,7 @@ public class Change_personal_info extends Activity implements View.OnClickListen
             String responseBody=response.body().string();
             Looper.prepare();
             Toast.makeText(Change_personal_info.this, "修改成功", Toast.LENGTH_SHORT).show();
-//            finish();
-//            back();
+            finish();
             Looper.loop();
         } catch (IOException e) {
             e.printStackTrace();
@@ -439,11 +438,16 @@ public class Change_personal_info extends Activity implements View.OnClickListen
         } else { // 从相册中选择，那么裁剪的图片保存在take_photo中
             String time = new SimpleDateFormat("yyyyMMddHHmmss", Locale.CHINA).format(new Date());
             String fileName = "photo_" + time;
-            File mCutFile = new File(Environment.getExternalStorageDirectory() + "/take_photo", fileName + ".jpeg");
-            if (!mCutFile.getParentFile().exists()) {
-                mCutFile.getParentFile().mkdirs();
+//            File mCutFile = new File(Environment.getExternalStorageDirectory() + "/take_photo", fileName + ".jpeg");
+            imgFile = new File(Environment.getExternalStorageDirectory() + "/take_photo", fileName + ".jpeg");
+            if (!imgFile.getParentFile().exists()) {
+                imgFile.getParentFile().mkdirs();
             }
-            mCutUri = getUriForFile(this, mCutFile);
+//            imgFile = new File(mCutFile, fileName + ".jpeg");
+            mCutUri = getUriForFile(this, imgFile);
+
+
+            System.out.println();
         }
         intent.putExtra(MediaStore.EXTRA_OUTPUT, mCutUri);
         Toast.makeText(this, "剪裁图片", Toast.LENGTH_SHORT).show();
