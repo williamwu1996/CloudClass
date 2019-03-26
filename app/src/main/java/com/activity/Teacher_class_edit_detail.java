@@ -122,6 +122,8 @@ public class Teacher_class_edit_detail extends Activity implements View.OnClickL
 
     }
 
+
+
     private void showPopupWindow() {
         //设置contentView
         View contentView = LayoutInflater.from(Teacher_class_edit_detail.this).inflate(R.layout.popup_getpicture, null);

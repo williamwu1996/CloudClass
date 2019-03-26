@@ -1,9 +1,11 @@
 package com.activity;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -30,6 +32,7 @@ import android.widget.Toast;
 import com.cloudclass.HomeworkItem;
 import com.cloudclass.HomeworkItemAdapter;
 import com.cloudclass.R;
+import com.cloudclass.SplashActivity;
 import com.cloudclass.StudentMemberItem;
 import com.cloudclass.StudentMemberItemAdapter;
 import com.cloudclass.StudentResourceItem;
@@ -179,6 +182,24 @@ public class Student_class_main extends AppCompatActivity {
 
         memberAdapter = new StudentMemberItemAdapter(memberlist);
         memberListView = findViewById(R.id.student_class_main_members_listview);
+        memberListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                                    long arg3) {
+                TextView tv = arg1.findViewById(R.id.student_main_members_email);
+                String email = tv.getText().toString();
+                String temp = email.split("@")[0]+email.split("@")[1];
+                Intent intent = new Intent();
+                intent.putExtra("chatuser",temp+"@129.204.207.18");
+                intent.setClass(Student_class_main.this, ChatRoom.class);
+//                startActivity(intent);
+                startActivityForResult(intent,1);
+                Toast.makeText(getApplicationContext(),
+                        "Chat with " + temp,
+                        Toast.LENGTH_SHORT).show();
+                memberAdapter.notifyDataSetChanged();
+            }
+        });
 
         mTextMessage = (TextView) findViewById(R.id.student_class_main_test_message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.student_class_navigation);
@@ -301,6 +322,25 @@ public class Student_class_main extends AppCompatActivity {
             }
         });
     }
+    SQLiteDatabase db = SplashActivity.dbHelper.getWritableDatabase();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 1)
+        {
+            if(resultCode == RESULT_CANCELED)
+            {
+                ContentValues values = new ContentValues();
+                values.put("isread", "Y");//key为字段名，value为值
+                db.update("chathistory", values, "hid>?", new String[]{"0"});
+            }
+            else
+            {
+                ContentValues values = new ContentValues();
+                values.put("isread", "Y");//key为字段名，value为值
+                db.update("chathistory", values, "hid>?", new String[]{"0"});
+            }
+        }
+    }
 
     public void exitclass(String uid, String cid){
         String url = "http://192.168.3.169:8079/course/exitclass";
@@ -347,7 +387,7 @@ public class Student_class_main extends AppCompatActivity {
             JSONArray jsonArray = new JSONArray(json);
             for(int i=0;i<jsonArray.length();i++){
                 JSONObject obj = jsonArray.getJSONObject(i);
-                    StudentMemberItem c = new StudentMemberItem(url+obj.getString("uid")+".JPG",obj.getString("name"));
+                    StudentMemberItem c = new StudentMemberItem(url+obj.getString("uid")+".JPG",obj.getString("name"),obj.getString("email"));
                     memberlist.add(c);
             }
         }catch (Exception e){

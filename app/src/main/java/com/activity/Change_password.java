@@ -96,7 +96,6 @@ public class Change_password extends Activity {
             }
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
-                    //todo openfire更改密码
                 Looper.prepare();
                 Toast.makeText(Change_password.this, "修改成功", Toast.LENGTH_SHORT).show();
                 finishUpdate();

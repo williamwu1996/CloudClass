@@ -29,6 +29,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.Util.ChatServerConnection;
+import com.Util.MyChatManagerListener;
+import com.Util.MyDatabaseHelper;
 import com.activity.Change_password;
 import com.activity.Change_personal_info;
 import com.activity.Create_class_info;
@@ -36,6 +38,8 @@ import com.activity.Join_class_code;
 import com.activity.Student_class_main;
 import com.activity.Teacher_class_main;
 
+import org.jivesoftware.smack.chat.ChatManager;
+import org.jivesoftware.smackx.offline.OfflineMessageManager;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,6 +82,7 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
     ImageView headpic;
     TextView personname;
 
+//    public static MyDatabaseHelper dbHelper;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -119,6 +124,10 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
         setContentView(R.layout.activity_main_page);
         headpic = findViewById(R.id.me_person_image);
         personname = findViewById(R.id.me_personname);
+//        dbHelper = new MyDatabaseHelper(this,"cloudchat.db",null,1);
+//        dbHelper.getWritableDatabase();
+        ChatManager chatManager = ChatManager.getInstanceFor(ChatServerConnection.getConnection());
+        chatManager.addChatListener(new MyChatManagerListener());
 
         SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         t = sp.getString("userid","");
@@ -144,8 +153,11 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
                 editor.putString("PASSWORD","");
                 editor.putString("userid","");
                 editor.commit();
-                //todo openfire注释
-//                ChatServerConnection.closeConnection();
+                //todo openfire退出当前账号并登录admin账号
+                ChatServerConnection.closeConnection();
+                ChatServerConnection.openConnection();
+                boolean a = ChatServerConnection.login("admin","admin");
+                System.out.println("---------------------------------Login status(退出)"+a);
                 Intent intent = new Intent(MainPage.this,LoginActivity.class);
                 startActivity(intent);
                 finish();

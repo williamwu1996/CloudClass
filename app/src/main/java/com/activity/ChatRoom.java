@@ -1,6 +1,10 @@
 package com.activity;
 
 import android.app.Activity;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -11,7 +15,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.Util.ChatServerConnection;
+import com.cloudclass.MainPage;
 import com.cloudclass.R;
+import com.cloudclass.SplashActivity;
 
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.chat.Chat;
@@ -30,11 +36,19 @@ public class ChatRoom extends Activity {
     public static ArrayAdapter<String> mConversationArrayAdapter;
     static Message msg;
     public static String userFrom;
+    EntityBareJid jid = null;
+    SQLiteDatabase db = SplashActivity.dbHelper.getWritableDatabase();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         userFrom=getIntent().getExtras().getString("chatuser");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chatroom);
+        //todo chathistory表所有数据isread设为Y
+//        ContentValues values = new ContentValues();
+//        values.put("isread", "Y");//key为字段名，value为值
+//        db.update("chathistory", values, "hid>?", new String[]{"0"});
+        //todo clear history button
+
         send_btn = (Button) findViewById(R.id.chatroom_send);
         send_msg = (EditText) findViewById(R.id.chatroom_input);
         messageView = (ListView) findViewById(R.id.msg_recycler_view);
@@ -42,7 +56,7 @@ public class ChatRoom extends Activity {
         messageView.setAdapter(mConversationArrayAdapter);
         XMPPConnection con = ChatServerConnection.getConnection();
         final ChatManager cm = ChatManager.getInstanceFor(con);
-        EntityBareJid jid = null;
+
         try {
             jid = JidCreate.entityBareFrom(userFrom);
         } catch (XmppStringprepException e) {
@@ -53,6 +67,7 @@ public class ChatRoom extends Activity {
                     public void processMessage(Chat chat, Message message) {
 //                            message.setBody(msg_content);
 //                        System.out.println(message.getFrom() + "say:" + message.getBody());
+                        System.out.println("----------------chat room---------------");
                     }
                 });
         send_btn.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +82,17 @@ public class ChatRoom extends Activity {
                     Message m = new Message();
                     m.setBody(msg_content);
                     chat.sendMessage(m.getBody());
+                    SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+                    String sender = sp.getString("USER_NAME","");
+                    //todo 插入消息
+//                    SQLiteDatabase db = SplashActivity.dbHelper.getWritableDatabase();
+                    ContentValues values = new ContentValues();
+                    values.put("sender",sender.split("@")[0]+sender.split("@")[1]);
+                    values.put("receiver",jid.toString().split("@")[0]);
+                    values.put("content",m.getBody());
+                    values.put("isread","Y");
+                    db.insert("chathistory",null,values);
+                    values.clear();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

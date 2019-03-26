@@ -10,6 +10,7 @@ import android.os.Message;
 import android.view.WindowManager;
 
 import com.Util.ChatServerConnection;
+import com.Util.MyDatabaseHelper;
 
 import org.json.JSONArray;
 
@@ -39,8 +40,6 @@ public class SplashActivity extends Activity {
                     finish();
                     break;
                 case GO_LOGIN://去登录页
-                    //todo admin身份登录openfire
-//                    ChatServerConnection.login("admin","admin");
                     Intent intent2 = new Intent(SplashActivity.this, LoginActivity.class);
                     startActivity(intent2);
                     finish();
@@ -49,14 +48,17 @@ public class SplashActivity extends Activity {
         }
     };
     UserInfo userinfo;
+    public static MyDatabaseHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         UserManage um = new UserManage();
-        //todo of注释
-//        ChatServerConnection.closeConnection();
+        ChatServerConnection.closeConnection();
+        //Database
+        dbHelper = new MyDatabaseHelper(this,"cloudchat.db",null,1);
+        dbHelper.getWritableDatabase();
         userinfo = um.getUserInfo(this);
         if(userinfo!=null) {
             String email = userinfo.getUserName();
@@ -89,10 +91,13 @@ public class SplashActivity extends Activity {
                             SharedPreferences.Editor editor = sp.edit();
                             editor.putString("userid", jsonArray.get(0).toString());
                             editor.commit();
-                            //todo 用户身份登录openfire
-//                            ChatServerConnection.login(email,password);
+                            String r = email.split("@")[0]+email.split("@")[1];
+                            boolean a = ChatServerConnection.login(r,"12345");
+                            System.out.println("-----------------------------------------------------Login status(in splash): "+a);
                             mHandler.sendEmptyMessageDelayed(GO_HOME, 2000);
                         } else {
+                            boolean a = ChatServerConnection.login("admin","admin");
+                            System.out.println("-----------------------------------------------------Login status(in splash): "+a);
                             mHandler.sendEmptyMessageDelayed(GO_LOGIN, 2000);
                         }
                     }catch (Exception e){
@@ -103,6 +108,7 @@ public class SplashActivity extends Activity {
 
         }else{
             mHandler.sendEmptyMessageAtTime(GO_LOGIN, 2000);
+//            boolean a = ChatServerConnection.login("admin","admin");
         }
 
     }

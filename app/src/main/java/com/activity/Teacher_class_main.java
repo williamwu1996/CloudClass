@@ -1,6 +1,8 @@
 package com.activity;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 import com.cloudclass.HomeworkItem;
 import com.cloudclass.HomeworkItemAdapter;
 import com.cloudclass.R;
+import com.cloudclass.SplashActivity;
 import com.cloudclass.StudentMemberItem;
 import com.cloudclass.StudentMemberItemAdapter;
 
@@ -221,21 +224,24 @@ public class Teacher_class_main extends AppCompatActivity {
         memberAdapter = new StudentMemberItemAdapter(memberlist);
         memberListView = findViewById(R.id.teacher_class_main_members_listview);
         //todo openfire
-//        memberListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-//                                    long arg3) {
-//                String temp= (String) ((TextView)arg1).getText();
-//                Intent intent = new Intent();
-//                intent.putExtra("chatuser",temp+"@129.204.207.18");
-//                intent.setClass(Teacher_class_main.this, ChatRoom.class);
+        memberListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                                    long arg3) {
+                TextView tv = arg1.findViewById(R.id.student_main_members_email);
+                String email = tv.getText().toString();
+                String temp = email.split("@")[0]+email.split("@")[1];
+                Intent intent = new Intent();
+                intent.putExtra("chatuser",temp+"@129.204.207.18");
+                intent.setClass(Teacher_class_main.this, ChatRoom.class);
 //                startActivity(intent);
-//                Toast.makeText(getApplicationContext(),
-//                        "Chat with " + temp,
-//                        Toast.LENGTH_SHORT).show();
-//                memberAdapter.notifyDataSetChanged();
-//            }
-//        });
+                startActivityForResult(intent,3);
+                Toast.makeText(getApplicationContext(),
+                        "Chat with " + temp,
+                        Toast.LENGTH_SHORT).show();
+                memberAdapter.notifyDataSetChanged();
+            }
+        });
 
         tabHost = (TabHost) findViewById(R.id.teacher_class_main_homework_page);
         tabHost.setup();
@@ -353,8 +359,23 @@ public class Teacher_class_main extends AppCompatActivity {
                 }
             }
         }
+        if(requestCode == 3)
+        {
+            if(resultCode == RESULT_CANCELED)
+            {
+                ContentValues values = new ContentValues();
+                values.put("isread", "Y");//key为字段名，value为值
+                db.update("chathistory", values, "hid>?", new String[]{"0"});
+            }
+            else
+            {
+                ContentValues values = new ContentValues();
+                values.put("isread", "Y");//key为字段名，value为值
+                db.update("chathistory", values, "hid>?", new String[]{"0"});
+            }
+        }
     }
-
+    SQLiteDatabase db = SplashActivity.dbHelper.getWritableDatabase();
     public void getStudents(){
         String url = "http://192.168.3.169:8079/course/getstudents";
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -389,9 +410,11 @@ public class Teacher_class_main extends AppCompatActivity {
         try{
             String url = "http://129.204.207.18:8079/resource/img/head_pic/";
             JSONArray jsonArray = new JSONArray(json);
+            System.out.println("----------------------------------------memberlist--------------------------------");
+            System.out.println(json);
             for(int i=0;i<jsonArray.length();i++){
                 JSONObject obj = jsonArray.getJSONObject(i);
-                StudentMemberItem c = new StudentMemberItem(url+obj.getString("uid")+".JPG",obj.getString("name"));
+                StudentMemberItem c = new StudentMemberItem(url+obj.getString("uid")+".JPG",obj.getString("name"),obj.getString("email"));
                 memberlist.add(c);
             }
         }catch (Exception e){

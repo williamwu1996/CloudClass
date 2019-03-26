@@ -93,12 +93,6 @@ public class Forget_password extends Activity {
 //                message.setText(response.body().string());
                 //成功true，不成功false
                 String result = response.body().string();
-                if(result.equals("true")){
-                    //todo openfire更改密码
-
-                }else{
-
-                }
             }
         });
 

@@ -69,7 +69,7 @@ public class StudentMemberItemAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.iv = (ImageView) convertView.findViewById(R.id.student_main_members_item_img);
             holder.name = (TextView) convertView.findViewById(R.id.student_main_members_name);
-
+            holder.email = (TextView) convertView.findViewById(R.id.student_main_members_email);
             convertView.setTag(holder);
         } else {
             holder = (StudentMemberItemAdapter.ViewHolder) convertView.getTag();
@@ -77,7 +77,7 @@ public class StudentMemberItemAdapter extends BaseAdapter {
         StudentMemberItem news = list.get(position);
         holder.iv.setTag(news.getImageid());
         holder.name.setText(news.getName());
-
+        holder.email.setText(news.getEmail());
 //         如果本地已有缓存，就从本地读取，否则从网络请求数据
         if (mImageCache.get(news.getImageid()) != null) {
             holder.iv.setImageDrawable(mImageCache.get(news.getImageid()));
@@ -91,6 +91,7 @@ public class StudentMemberItemAdapter extends BaseAdapter {
     class ViewHolder {
         ImageView iv;
         TextView name;
+        TextView email;
     }
 
     class ImageTask extends AsyncTask<String, Void, BitmapDrawable> {
