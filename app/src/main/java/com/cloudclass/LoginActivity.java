@@ -114,7 +114,7 @@ public class LoginActivity extends Activity {
                                     UserManage.getInstance().saveUserInfo(LoginActivity.this, userName, userPwd);
                                     //todo 以用户身份登录openfire
                                     ChatServerConnection.closeConnection();
-                                    boolean a = ChatServerConnection.login(userName.split("@")[0]+userName.split("@")[1],"12345");
+                                    boolean a = ChatServerConnection.login(userName.replace("@","#"),"12345");
                                     System.out.println("-----------------------------------------------------Login status(in login): "+a);
                                     Intent intent = new Intent(LoginActivity.this, MainPage.class);//跳转到主页
                                     startActivity(intent);

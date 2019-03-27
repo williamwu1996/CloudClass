@@ -91,7 +91,7 @@ public class SplashActivity extends Activity {
                             SharedPreferences.Editor editor = sp.edit();
                             editor.putString("userid", jsonArray.get(0).toString());
                             editor.commit();
-                            String r = email.split("@")[0]+email.split("@")[1];
+                            String r = email.replace("@","#");
                             boolean a = ChatServerConnection.login(r,"12345");
                             System.out.println("-----------------------------------------------------Login status(in splash): "+a);
                             mHandler.sendEmptyMessageDelayed(GO_HOME, 2000);

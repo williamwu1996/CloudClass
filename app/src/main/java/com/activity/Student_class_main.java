@@ -188,7 +188,7 @@ public class Student_class_main extends AppCompatActivity {
                                     long arg3) {
                 TextView tv = arg1.findViewById(R.id.student_main_members_email);
                 String email = tv.getText().toString();
-                String temp = email.split("@")[0]+email.split("@")[1];
+                String temp = email.replace("@","#");
                 Intent intent = new Intent();
                 intent.putExtra("chatuser",temp+"@129.204.207.18");
                 intent.setClass(Student_class_main.this, ChatRoom.class);
@@ -325,19 +325,24 @@ public class Student_class_main extends AppCompatActivity {
     SQLiteDatabase db = SplashActivity.dbHelper.getWritableDatabase();
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        String me = sp.getString("USER_NAME","");//732315805@qq.com
         if(requestCode == 1)
         {
             if(resultCode == RESULT_CANCELED)
             {
                 ContentValues values = new ContentValues();
                 values.put("isread", "Y");//key为字段名，value为值
-                db.update("chathistory", values, "hid>?", new String[]{"0"});
+                //todo 將兩人的聊天記錄標為已讀
+//                db.update("chathistory", values, "sender", new String[]{me.replace("@","#")});
+//                db.update("chathistory", values, "receiver", new String[]{me.replace("@","#")});
             }
             else
             {
                 ContentValues values = new ContentValues();
                 values.put("isread", "Y");//key为字段名，value为值
-                db.update("chathistory", values, "hid>?", new String[]{"0"});
+//                db.update("chathistory", values, "sender", new String[]{me.replace("@","#")});
+//                db.update("chathistory", values, "receiver", new String[]{me.replace("@","#")});
             }
         }
     }

@@ -93,7 +93,7 @@ public class Register_password extends Activity {
             public void onResponse(Call call, Response response) throws IOException {
 //                message.setText(response.body().string());
                 //todo openfire注释，缺少分组
-                ChatServerConnection.registerUser(address.split("@")[0]+address.split("@")[1], "12345");
+                ChatServerConnection.registerUser(address.replace("@","#"), "12345");
             }
         });
 

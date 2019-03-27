@@ -2,9 +2,12 @@ package com.cloudclass;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -13,6 +16,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -28,11 +32,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.Bean.Email;
 import com.Util.ChatServerConnection;
 import com.Util.MyChatManagerListener;
 import com.Util.MyDatabaseHelper;
 import com.activity.Change_password;
 import com.activity.Change_personal_info;
+import com.activity.ChatRoom;
 import com.activity.Create_class_info;
 import com.activity.Join_class_code;
 import com.activity.Student_class_main;
@@ -50,8 +56,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -136,7 +144,7 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
 
         initHeadpic(t);
         initPerson(t);
-        initMessageList();
+//        initMessageList();
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
@@ -164,15 +172,31 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
             }
         });
 
-        messageadapter = new MessageAdapter(MainPage.this, R.layout.message_item, messagelist);
+        messageadapter = new MessageAdapter(messagelist);
 
-//        classadapter = new ClassAdapter(MainPage.this,R.layout.class_item, classlist);
         classadapter = new ClassAdapter(classlist);
         listView = findViewById(R.id.list_view);
 //        listView.setAdapter(classadapter);
 
         listViewmessage = findViewById(R.id.list_view_message);
         listViewmessage.setAdapter(null);
+        listViewmessage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView tv = view.findViewById(R.id.message_fromclass);
+                String email = tv.getText().toString();
+                String temp = email.replace("@","#");
+                Intent intent = new Intent();
+                intent.putExtra("chatuser",temp+"@129.204.207.18");
+                intent.setClass(MainPage.this, ChatRoom.class);
+//                startActivity(intent);
+                startActivityForResult(intent,1);
+                Toast.makeText(getApplicationContext(),
+                        "Chat with " + temp,
+                        Toast.LENGTH_SHORT).show();
+                messageadapter.notifyDataSetChanged();
+            }
+        });
 
         linearLayout = findViewById(R.id.me_navigation);
         addclass = findViewById(R.id.add_class);
@@ -202,6 +226,7 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
             }
         });
 
+        getMessageMember();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -314,6 +339,35 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        String me = sp.getString("USER_NAME","");//732315805@qq.com
+        if(requestCode == 1)
+        {
+            if(resultCode == RESULT_CANCELED)
+            {
+                ContentValues values = new ContentValues();
+                values.put("isread", "Y");//key为字段名，value为值
+                listViewmessage.setAdapter(messageadapter);
+                listView.setAdapter(null);
+                //todo 將兩人的聊天記錄標為已讀
+//                db.update("chathistory", values, "sender", new String[]{me.replace("@","#")});
+//                db.update("chathistory", values, "receiver", new String[]{me.replace("@","#")});
+            }
+            else
+            {
+                listViewmessage.setAdapter(messageadapter);
+                listView.setAdapter(null);
+                ContentValues values = new ContentValues();
+                values.put("isread", "Y");//key为字段名，value为值
+//                db.update("chathistory", values, "sender", new String[]{me.replace("@","#")});
+//                db.update("chathistory", values, "receiver", new String[]{me.replace("@","#")});
+            }
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id){
@@ -373,17 +427,90 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
         });
     }
 
-    private void initMessageList(){
+    SQLiteDatabase db = SplashActivity.dbHelper.getWritableDatabase();
+    public void getMessageMember(){
+        SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        String me = sp.getString("USER_NAME","");//732315805@qq.com
+        Set<String> emails = new HashSet<>();
+        Cursor cursor = db.rawQuery("select distinct sender from chathistory where receiver = '"+me.replace("@","#")+"'",null);
+        if(cursor.moveToFirst()){
+            do{
+                String email = cursor.getString(cursor.getColumnIndex("sender"));
+//                Email e = new Email();
+//                e.setEmail(email);
+                emails.add(email);
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+        Cursor cursor1 = db.rawQuery("select distinct receiver from chathistory where sender = '"+me.replace("@","#")+"'",null);
+        if(cursor1.moveToFirst()){
+            do{
+                String email = cursor1.getString(cursor1.getColumnIndex("receiver"));
+//                Email e = new Email();
+//                e.setEmail(email);
+                emails.add(email);
+            }while (cursor1.moveToNext());
+        }
+        cursor1.close();
+        String testinfo = "";
 
+        for(String e:emails){
+            testinfo += e+"@";
+        }
+//        System.out.println("testinfo is "+testinfo);
+        //發送testinfo返回users
+        String url = "http://129.204.207.18:8079/users/getusers";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        FormBody.Builder formBody = new FormBody.Builder();
+        formBody.add("testinfo", testinfo);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody.build())
+                .build();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            public void onFailure(Call call, IOException e) {
+                System.out.println("Message Members retrieve failed........");
+            }
+
+            public void onResponse(Call call, Response response) throws IOException {
+                String json = response.body().string();
+                System.out.println();
+                System.out.println("-------------------Message Members-------------------");
+                System.out.println(json);
+                initMessageList(json);
+            }
+        });
+    }
+
+    private void initMessageList(final String json){
         messagelist.clear();
-        MessageMain a = new MessageMain(R.drawable.timg,"Java04","19-2-20 17:02","Williamwu","Hi, how are you?");
-        messagelist.add(a);
-        MessageMain b = new MessageMain(R.drawable.timg,"Java03","19-2-10 10:58","Williamwu","Nice to meet you");
-        messagelist.add(b);
-        MessageMain c = new MessageMain(R.drawable.timg,"OS04","19-2-09 12:02","Williamwu","你好");
-        messagelist.add(c);
-        MessageMain d = new MessageMain(R.drawable.timg,"Dotnet04","19-1-31 13:28","Williamwu","约吗");
-        messagelist.add(d);
+        try{
+            String url = "http://129.204.207.18:8079/resource/img/head_pic/";
+            JSONArray jsonArray = new JSONArray(json);
+            for(int i=0;i<jsonArray.length();i++){
+                JSONObject obj = jsonArray.getJSONObject(i);
+                MessageMain m = new MessageMain(url+obj.getInt("uid")+".JPG",obj.getString("email"),"2019-3-27",obj.getString("name"),"this is content");
+                messagelist.add(m);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                listViewmessage.setAdapter(null);
+            }
+        });
+
+//        messagelist.clear();
+//        MessageMain a = new MessageMain(R.drawable.timg,"Java04","19-2-20 17:02","Williamwu","Hi, how are you?");
+//        messagelist.add(a);
+//        MessageMain b = new MessageMain(R.drawable.timg,"Java03","19-2-10 10:58","Williamwu","Nice to meet you");
+//        messagelist.add(b);
+//        MessageMain c = new MessageMain(R.drawable.timg,"OS04","19-2-09 12:02","Williamwu","你好");
+//        messagelist.add(c);
+//        MessageMain d = new MessageMain(R.drawable.timg,"Dotnet04","19-1-31 13:28","Williamwu","约吗");
+//        messagelist.add(d);
     }
 
     //个人信息,放入sp
@@ -461,7 +588,8 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
         super.onResume();
         initHeadpic(t);
         initPerson(t);
-        initMessageList();
+//        initMessageList();
+        getMessageMember();
         getAllClass();
     }
 

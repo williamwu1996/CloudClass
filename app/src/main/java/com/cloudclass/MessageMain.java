@@ -2,13 +2,13 @@ package com.cloudclass;
 
 public class MessageMain {
 
-    private int imageid;
+    private String imageid;
     private String fromclass;
     private String time;
     private String name;
     private String firstcontent;
 
-    public MessageMain(int imageid, String fromclass, String time, String name, String firstcontent) {
+    public MessageMain(String imageid, String fromclass, String time, String name, String firstcontent) {
         this.imageid = imageid;
         this.fromclass = fromclass;
         this.time = time;
@@ -16,7 +16,7 @@ public class MessageMain {
         this.firstcontent = firstcontent;
     }
 
-    public int getImageid() {
+    public String getImageid() {
         return imageid;
     }
 
@@ -34,5 +34,25 @@ public class MessageMain {
 
     public String getFirstcontent() {
         return firstcontent;
+    }
+
+    public void setImageid(String imageid) {
+        this.imageid = imageid;
+    }
+
+    public void setFromclass(String fromclass) {
+        this.fromclass = fromclass;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setFirstcontent(String firstcontent) {
+        this.firstcontent = firstcontent;
     }
 }
