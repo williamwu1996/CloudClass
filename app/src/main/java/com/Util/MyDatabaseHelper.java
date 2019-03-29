@@ -14,6 +14,13 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             "content varchar(300)," +
             "isread char(1))";
 
+    public static final String CREATE_CHECKIN = "create table checkin(" +
+            "chid int not null," +
+            "uid int," +
+            "uname varchar(32)," +
+            "distance int" +
+            ")" ;
+
     private Context mContext;
 
     public MyDatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -24,12 +31,14 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_CHATHISTORY);
-        Toast.makeText(mContext,"Create db success",Toast.LENGTH_SHORT).show();
+        db.execSQL(CREATE_CHECKIN);
+//        Toast.makeText(mContext,"Create db success",Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("drop table if exists chathistory");
+        db.execSQL("drop table if exists checkin");
         onCreate(db);
     }
 }

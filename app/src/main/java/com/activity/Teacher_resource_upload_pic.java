@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -29,9 +30,19 @@ import android.widget.Toast;
 import com.cloudclass.R;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class Teacher_resource_upload_pic extends Activity implements View.OnClickListener {
 
@@ -54,16 +65,20 @@ public class Teacher_resource_upload_pic extends Activity implements View.OnClic
     ImageView posticon;
     ImageView notposticon;
 
+    EditText tvtitle,tvprofile;
+    String cid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.teacher_resource_upload_pic);
-
+        Intent intent = getIntent();
+        cid = intent.getStringExtra("cid");
         post = findViewById(R.id.teacher_resource_upload_pic_upload_and_post);
         notpost = findViewById(R.id.teacher_resource_upload_pic_upload_not_post);
         posticon = findViewById(R.id.teacher_resource_upload_pic_upload_and_post_icon);
         notposticon = findViewById(R.id.teacher_resource_upload_pic_upload_not_post_icon);
-
+        tvtitle = findViewById(R.id.teacher_resource_upload_pic_title);
+        tvprofile = findViewById(R.id.teacher_resource_upload_pic_profile);
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,6 +115,43 @@ public class Teacher_resource_upload_pic extends Activity implements View.OnClic
 
         upload = findViewById(R.id.teacher_resource_upload_pic_upload_btn);
         upload.setOnClickListener(this);
+    }
+
+    public void uploadFile(){
+//        try {
+            OkHttpClient client=new OkHttpClient();
+            RequestBody fileBody = RequestBody.create(MediaType.parse("image/png"), imgFile);//将file转换成RequestBody文件
+            RequestBody requestBody=new MultipartBody.Builder()
+                    .addFormDataPart("files",tvtitle.getText().toString()+".JPG", fileBody)
+                    .addFormDataPart("status","going")
+                    .addFormDataPart("cid",cid)
+                    .build();
+            Request request=new Request.Builder()
+                    .url("http://192.168.3.169:8079/resource/uploadfile")
+                    .post(requestBody)
+                    .build();
+//            Response response=client.newCall(request).execute();
+//            String responseBody=response.body().string();
+//            System.out.println("---------------upload File response----------------------"+responseBody);
+//            finish();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        Call call = client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                System.out.println("-------------------------Failed----------------------------");
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String body = response.body().string();
+                System.out.println("---------------upload File response----------------------"+body);
+                finish();
+            }
+        });
     }
 
     private void showPopupWindow() {
@@ -171,6 +223,7 @@ public class Teacher_resource_upload_pic extends Activity implements View.OnClic
             }
             break;
             case R.id.teacher_resource_upload_pic_upload_btn:
+                uploadFile();
                 if(mode==1){
                     //上传并发布
                     Toast.makeText(this, "上传并发布", Toast.LENGTH_SHORT).show();
@@ -217,11 +270,12 @@ public class Teacher_resource_upload_pic extends Activity implements View.OnClic
             }
         }
     }
-
+    File imgFile;
     private void takePhone() {
         // 要保存的文件名
         String time = new SimpleDateFormat("yyyyMMddHHmmss", Locale.CHINA).format(new Date());
-        String fileName = "photo_" + time;
+//        String fileName = "photo_" + time;
+        String fileName = tvtitle.getText().toString();
         // 创建一个文件夹
         String path = Environment.getExternalStorageDirectory() + "/take_photo";
         File file = new File(path);
@@ -229,7 +283,7 @@ public class Teacher_resource_upload_pic extends Activity implements View.OnClic
             file.mkdirs();
         }
         // 要保存的图片文件
-        File imgFile = new File(file, fileName + ".jpeg");
+        imgFile = new File(file, fileName + ".jpeg");
         // 将file转换成uri
         // 注意7.0及以上与之前获取的uri不一样了，返回的是provider路径
         imgUri = getUriForFile(this, imgFile);
@@ -306,12 +360,13 @@ public class Teacher_resource_upload_pic extends Activity implements View.OnClic
             mCutUri = uri;
         } else { // 从相册中选择，那么裁剪的图片保存在take_photo中
             String time = new SimpleDateFormat("yyyyMMddHHmmss", Locale.CHINA).format(new Date());
-            String fileName = "photo_" + time;
-            File mCutFile = new File(Environment.getExternalStorageDirectory() + "/take_photo", fileName + ".jpeg");
-            if (!mCutFile.getParentFile().exists()) {
-                mCutFile.getParentFile().mkdirs();
+//            String fileName = "photo_" + time;
+            String fileName = tvtitle.getText().toString();
+            imgFile = new File(Environment.getExternalStorageDirectory() + "/take_photo", fileName + ".jpeg");
+            if (!imgFile.getParentFile().exists()) {
+                imgFile.getParentFile().mkdirs();
             }
-            mCutUri = getUriForFile(this, mCutFile);
+            mCutUri = getUriForFile(this, imgFile);
         }
         intent.putExtra(MediaStore.EXTRA_OUTPUT, mCutUri);
         Toast.makeText(this, "剪裁图片", Toast.LENGTH_SHORT).show();

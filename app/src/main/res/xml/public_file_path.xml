@@ -3,4 +3,10 @@
     <external-path
         name="images"
         path="take_photo/"/>
+    <external-path
+        name="files_root"
+        path="Android/data/com.dfy.ming.lawyer/"/>
+    <external-path
+        name="external_storage_root"
+        path="."/>
 </resources>

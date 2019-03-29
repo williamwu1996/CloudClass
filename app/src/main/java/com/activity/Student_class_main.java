@@ -1,19 +1,26 @@
 package com.activity;
 
+import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -29,9 +36,13 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.Util.FileUtils;
+import com.Util.MapTable;
 import com.cloudclass.HomeworkItem;
 import com.cloudclass.HomeworkItemAdapter;
 import com.cloudclass.R;
+import com.cloudclass.ResourceItem;
+import com.cloudclass.ResourceItemAdapter;
 import com.cloudclass.SplashActivity;
 import com.cloudclass.StudentMemberItem;
 import com.cloudclass.StudentMemberItemAdapter;
@@ -41,6 +52,8 @@ import com.cloudclass.StudentResourceItemAdapter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -55,11 +68,11 @@ import okhttp3.Response;
 
 public class Student_class_main extends AppCompatActivity {
 
-    private String[] data = {"aaa","bbb","bbb","bbb","bbb","bbb","bbb","bbb","bbb","bbb","bbb","bbb"};
-    private List<StudentResourceItem> resourcelist = new ArrayList<>();
+//    private List<StudentResourceItem> resourcelist = new ArrayList<>();
     private List<StudentMemberItem> memberlist = new ArrayList<>();
     private List<HomeworkItem> goinglist = new ArrayList<>();
     private List<HomeworkItem> endlist = new ArrayList<>();
+    private List<ResourceItem> resourcelist = new ArrayList<>();
 
     private LinearLayout memberLinearLayout;
     private LinearLayout detailLinearLayout;
@@ -68,7 +81,7 @@ public class Student_class_main extends AppCompatActivity {
     Button checkin;
     Button exitclass;
     private ListView resourceListView;
-    StudentResourceItemAdapter resourceAdapter;
+//    StudentResourceItemAdapter resourceAdapter;
     private ListView memberListView;
     StudentMemberItemAdapter memberAdapter;
 
@@ -77,7 +90,7 @@ public class Student_class_main extends AppCompatActivity {
 
     ListView goingListView, concludedListView;
     HomeworkItemAdapter goingAdapter, concludedAdapter;
-
+    ResourceItemAdapter resourceItemAdapter;
     TextView title;
 
     private TabHost tabHost;
@@ -120,7 +133,7 @@ public class Student_class_main extends AppCompatActivity {
             return false;
         }
     };
-
+    String cid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,7 +141,7 @@ public class Student_class_main extends AppCompatActivity {
         memberLinearLayout = findViewById(R.id.student_class_main_members_page);
         detailLinearLayout = findViewById(R.id.student_class_main_detail_page);
         Intent intent = getIntent();
-        String cid = intent.getStringExtra("cid");
+        cid = intent.getStringExtra("cid");
         String uid = intent.getStringExtra("uid");
         String profile = intent.getStringExtra("profile");
         String classname = intent.getStringExtra("classname");
@@ -151,9 +164,10 @@ public class Student_class_main extends AppCompatActivity {
         title = findViewById(R.id.student_class_title);
         title.setText(coursename);
 
-        initResourceList();
+//        initResourceList();
 //        initMemberList();
         initClasscover(cid);
+        getResources(cid);
 
 
         tabHost = (TabHost) findViewById(R.id.student_class_main_homework_page);
@@ -176,9 +190,18 @@ public class Student_class_main extends AppCompatActivity {
 
         initHomework(cid);
 
-        resourceAdapter = new StudentResourceItemAdapter(Student_class_main.this,R.layout.student_resource_item, resourcelist);
+        resourceItemAdapter = new ResourceItemAdapter(Student_class_main.this,R.layout.resource_item, resourcelist);
         resourceListView = findViewById(R.id.student_class_main_resource_listview);
-        resourceListView.setAdapter(resourceAdapter);
+        resourceListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView title = view.findViewById(R.id.resource_item_title);
+                TextView filename = view.findViewById(R.id.resource_item_filename);
+//                Toast.makeText(Teacher_class_main.this,filename.getText().toString(),Toast.LENGTH_SHORT).show();
+                System.out.println("----------------------------");
+                downloadFile(title.getText().toString(),filename.getText().toString());
+            }
+        });
 
         memberAdapter = new StudentMemberItemAdapter(memberlist);
         memberListView = findViewById(R.id.student_class_main_members_listview);
@@ -370,17 +393,120 @@ public class Student_class_main extends AppCompatActivity {
         });
     }
 
-    private void initResourceList(){
-        for(int i = 0;i<3;i++) {
-            StudentResourceItem r1 = new StudentResourceItem(R.drawable.timg, "资源1", "2019-02-22 11:11");
-            resourcelist.add(r1);
-            StudentResourceItem r2 = new StudentResourceItem(R.drawable.timg, "资源2", "2019-02-23 11:11");
-            resourcelist.add(r2);
-            StudentResourceItem r3 = new StudentResourceItem(R.drawable.timg, "资源3", "2019-02-24 11:11");
-            resourcelist.add(r3);
-            StudentResourceItem r4 = new StudentResourceItem(R.drawable.timg, "资源4", "2019-02-25 11:11");
-            resourcelist.add(r4);
+
+    public void downloadFile(final String title,String filename){
+        final String suffix = filename.split("\\.")[1];
+        final String name = title+"."+suffix;
+        String url = "http://129.204.207.18:8079/resource/resource/"+filename;
+        System.out.println("url is "+url);
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+            public void onResponse(Call call, Response response) throws IOException {
+                System.out.println("Success");
+                InputStream is = response.body().byteStream();//得到图片的流
+    //                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                FileOutputStream fileOutputStream = null;//文件输出流
+                if (is != null) {
+                    FileUtils fileUtils = new FileUtils();
+                    fileOutputStream = new FileOutputStream(fileUtils.createFile(title)+"."+suffix);//指定文件保存路径，代码看下一步
+                    byte[] buf = new byte[1024];
+                    int ch;
+                    while ((ch = is.read(buf)) != -1) {
+                        fileOutputStream.write(buf, 0, ch);//将获取到的流写入文件中
+                    }
+                    openFile(Student_class_main.this, name);
+                }
+                if (fileOutputStream != null) {
+                    fileOutputStream.flush();
+                    fileOutputStream.close();
+                }
+            }
+        });
+    }
+
+    public static void openFile(Context context, String filename){
+        File file = new File(Environment.getExternalStorageDirectory() + "/com.cloudclass/"+filename);
+        try {
+            Intent intent = new Intent();
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setAction(Intent.ACTION_VIEW);
+//            intent.setDataAndType(Uri.fromFile(new File(file)), "*/*");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                Uri fileUri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);//android 7.0以上
+                Uri fileUri = FileProvider.getUriForFile(context, "com.rain.takephotodemo.FileProvider", file);//android 7.0以上
+                intent.setDataAndType(fileUri, MapTable.getMIMEType(filename));
+                grantUriPermission(context, fileUri, intent);
+            } else {
+//                intent.setDataAndType(/*uri*/Uri.fromFile(file), "*/*");
+                intent.setDataAndType(/*uri*/Uri.fromFile(file), MapTable.getMIMEType(filename));
+            }
+
+            context.startActivity(intent);
+            Intent.createChooser(intent, "请选择对应的软件打开该附件！");
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(context, "sorry附件不能打开，请下载相关软件！", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private static void grantUriPermission(Context context, Uri fileUri, Intent intent) {
+        List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        for (ResolveInfo resolveInfo : resInfoList) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            context.grantUriPermission(packageName, fileUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+    }
+
+    public void getResources(String cid){
+        String url = "http://192.168.3.169:8079/resource/getclassresources";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        FormBody.Builder formBody = new FormBody.Builder();
+        formBody.add("cid", cid);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody.build())
+                .build();
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                System.out.println("-------------------------Resource retrieved Failed----------------------------");
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String body = response.body().string();
+                System.out.println("-------------------------Resources List----------------------------");
+                System.out.println(body);
+                initResources(body);
+            }
+        });
+    }
+
+    public void initResources(String json){
+        resourcelist.clear();
+        try{
+            JSONArray jsonArray = new JSONArray(json);
+            for(int i=0;i<jsonArray.length();i++){
+                JSONObject obj = jsonArray.getJSONObject(i);
+                ResourceItem item = new ResourceItem(obj.getString("name"),obj.getString("path"));
+                resourcelist.add(item);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                resourceListView.setAdapter(resourceItemAdapter);
+            }
+        });
     }
 
     private void initMemberList(final String json){
@@ -460,6 +586,8 @@ public class Student_class_main extends AppCompatActivity {
 
     public void listhomework(String json){
         try {
+            goinglist.clear();
+            endlist.clear();
             JSONArray jsonArray = new JSONArray(json);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
@@ -483,5 +611,13 @@ public class Student_class_main extends AppCompatActivity {
                 concludedListView.setAdapter(concludedAdapter);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getResources(cid);
+        initHomework(cid);
+        initClasscover(cid);
     }
 }
