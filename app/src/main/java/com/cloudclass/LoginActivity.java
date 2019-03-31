@@ -112,7 +112,6 @@ public class LoginActivity extends Activity {
                                     Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
 
                                     UserManage.getInstance().saveUserInfo(LoginActivity.this, userName, userPwd);
-                                    //todo 以用户身份登录openfire
                                     ChatServerConnection.closeConnection();
                                     boolean a = ChatServerConnection.login(userName.replace("@","#"),"12345");
                                     System.out.println("-----------------------------------------------------Login status(in login): "+a);

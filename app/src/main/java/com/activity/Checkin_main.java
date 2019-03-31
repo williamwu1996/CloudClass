@@ -17,11 +17,15 @@ public class Checkin_main extends Activity {
 
     Button back;
     Button startcheck;
+    String cid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.check_in_main);
+        Intent intent = getIntent();
+        cid = intent.getStringExtra("cid");
+
 
         back = findViewById(R.id.checkin_main_back);
         back.setOnClickListener(new View.OnClickListener(){
@@ -35,10 +39,9 @@ public class Checkin_main extends Activity {
         startcheck.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                //进入开始签到页
-//                Intent intent = new Intent(Checkin_main.this,Checkin_going.class);
-//                startActivity(intent);
+                //进入签到码页
                 Intent i = new Intent(Checkin_main.this,Teacher_checkin_code.class);
+                i.putExtra("cid",cid);
                 startActivity(i);
             }
         });
@@ -50,7 +53,7 @@ public class Checkin_main extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //跳转至签到结果
-                Intent intent = new Intent(Checkin_main.this,Checkin_result.class);
+                Intent intent = new Intent(Checkin_main.this,Checkin_result_history.class);
                 startActivity(intent);
             }
         });

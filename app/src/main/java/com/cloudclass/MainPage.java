@@ -161,7 +161,7 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
                 editor.putString("PASSWORD","");
                 editor.putString("userid","");
                 editor.commit();
-                //todo openfire退出当前账号并登录admin账号
+                //todo openfire退出当前账号并登录admin账号（貌似有问题）
                 ChatServerConnection.closeConnection();
                 ChatServerConnection.openConnection();
                 boolean a = ChatServerConnection.login("admin","admin");
@@ -347,11 +347,10 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
         {
             if(resultCode == RESULT_CANCELED)
             {
-                ContentValues values = new ContentValues();
-                values.put("isread", "Y");//key为字段名，value为值
+//                ContentValues values = new ContentValues();
+//                values.put("isread", "Y");//key为字段名，value为值
                 listViewmessage.setAdapter(messageadapter);
                 listView.setAdapter(null);
-                //todo 將兩人的聊天記錄標為已讀
 //                db.update("chathistory", values, "sender", new String[]{me.replace("@","#")});
 //                db.update("chathistory", values, "receiver", new String[]{me.replace("@","#")});
             }
@@ -359,8 +358,8 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
             {
                 listViewmessage.setAdapter(messageadapter);
                 listView.setAdapter(null);
-                ContentValues values = new ContentValues();
-                values.put("isread", "Y");//key为字段名，value为值
+//                ContentValues values = new ContentValues();
+//                values.put("isread", "Y");//key为字段名，value为值
 //                db.update("chathistory", values, "sender", new String[]{me.replace("@","#")});
 //                db.update("chathistory", values, "receiver", new String[]{me.replace("@","#")});
             }

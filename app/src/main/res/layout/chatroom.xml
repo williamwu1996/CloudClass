@@ -6,6 +6,48 @@
     android:background="#ffffff"
     android:orientation="vertical">
 
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/title_bg"
+        >
+
+        <Button
+            android:id="@+id/chatroom_back"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:textSize="17sp"
+            android:background="@drawable/back"
+            android:textColor="@color/colorwhite"
+            />
+
+        <TextView
+            android:id="@+id/main_title"
+            android:layout_width="0dp"
+            android:layout_marginLeft="40dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="修改密码"
+            android:textSize="24sp"
+            android:textColor="@color/colorwhite"
+            />
+
+        <Button
+            android:id="@+id/chatroom_clearhistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorwhite"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:background="@null"
+            android:text="清空记录" />
+
+    </LinearLayout>
     <ListView
         android:id="@+id/msg_recycler_view"
         android:layout_width="match_parent"

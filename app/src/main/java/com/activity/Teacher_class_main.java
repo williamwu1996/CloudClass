@@ -170,6 +170,7 @@ public class Teacher_class_main extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Teacher_class_main.this,Checkin_main.class);
+                intent.putExtra("cid",cid);
                 startActivity(intent);
             }
         });
@@ -238,7 +239,6 @@ public class Teacher_class_main extends AppCompatActivity {
 
         memberAdapter = new StudentMemberItemAdapter(memberlist);
         memberListView = findViewById(R.id.teacher_class_main_members_listview);
-        //todo openfire
         memberListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
@@ -506,16 +506,16 @@ public class Teacher_class_main extends AppCompatActivity {
         {
             if(resultCode == RESULT_CANCELED)
             {
-                ContentValues values = new ContentValues();
-                values.put("isread", "Y");//key为字段名，value为值
-                //todo 將兩人的聊天記錄標為已讀
+//                ContentValues values = new ContentValues();
+//                values.put("isread", "Y");//key为字段名，value为值
+//
 //                db.update("chathistory", values, "sender", new String[]{me.replace("@","#")});
 //                db.update("chathistory", values, "receiver", new String[]{me.replace("@","#")});
             }
             else
             {
-                ContentValues values = new ContentValues();
-                values.put("isread", "Y");//key为字段名，value为值
+//                ContentValues values = new ContentValues();
+//                values.put("isread", "Y");//key为字段名，value为值
 //                db.update("chathistory", values, "sender", new String[]{me.replace("@","#")});
 //                db.update("chathistory", values, "receiver", new String[]{me.replace("@","#")});
             }

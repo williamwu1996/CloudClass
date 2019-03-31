@@ -246,6 +246,7 @@ public class Student_class_main extends AppCompatActivity {
             @Override
             public void onClick(View arg0) {
                 Intent intent = new Intent(Student_class_main.this,Student_checkin.class);
+                intent.putExtra("cid",cid);
                 startActivity(intent);
             }
         });
@@ -354,16 +355,13 @@ public class Student_class_main extends AppCompatActivity {
         {
             if(resultCode == RESULT_CANCELED)
             {
-                ContentValues values = new ContentValues();
-                values.put("isread", "Y");//key为字段名，value为值
-                //todo 將兩人的聊天記錄標為已讀
-//                db.update("chathistory", values, "sender", new String[]{me.replace("@","#")});
-//                db.update("chathistory", values, "receiver", new String[]{me.replace("@","#")});
+//                ContentValues values = new ContentValues();
+//                values.put("isread", "Y");//key为字段名，value为值
             }
             else
             {
-                ContentValues values = new ContentValues();
-                values.put("isread", "Y");//key为字段名，value为值
+//                ContentValues values = new ContentValues();
+//                values.put("isread", "Y");//key为字段名，value为值
 //                db.update("chathistory", values, "sender", new String[]{me.replace("@","#")});
 //                db.update("chathistory", values, "receiver", new String[]{me.replace("@","#")});
             }

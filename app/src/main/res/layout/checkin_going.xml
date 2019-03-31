@@ -5,6 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
+
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -46,6 +48,8 @@
             android:visibility="invisible"/>
 
     </LinearLayout>
+
+
 
 
     <LinearLayout
@@ -92,6 +96,14 @@
         android:layout_height="1.5dp"
         android:background="#EFEFEF"
         android:layout_width="match_parent"/>
+
+    <TextView
+        android:id="@+id/checkin_going_code"
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center_horizontal"
+        android:text="签到码：1234"
+        android:layout_marginTop="10dp"/>
 
     <TextView
         android:layout_width="match_parent"

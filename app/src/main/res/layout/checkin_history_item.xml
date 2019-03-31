@@ -7,12 +7,13 @@
 
     <TextView
         android:id="@+id/checkin_history_name"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:text="2017-04-09 08:08"
+        android:text="吴玠璘"
         android:layout_gravity="center_vertical"
         android:textColor="#000"
-        android:textSize="17dp"/>
+        android:textSize="17dp"
+        android:layout_marginLeft="10dp"/>
 
     <TextView
         android:id="@+id/checkin_history_status"

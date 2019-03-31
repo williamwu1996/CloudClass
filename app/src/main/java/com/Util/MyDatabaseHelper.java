@@ -15,10 +15,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             "isread char(1))";
 
     public static final String CREATE_CHECKIN = "create table checkin(" +
-            "chid int not null," +
-            "uid int," +
+            "chid integer not null," +
+            "uid integer," +
             "uname varchar(32)," +
-            "distance int" +
+            "distance integer" +
             ")" ;
 
     private Context mContext;
