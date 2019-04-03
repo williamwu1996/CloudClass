@@ -500,16 +500,6 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
                 listViewmessage.setAdapter(null);
             }
         });
-
-//        messagelist.clear();
-//        MessageMain a = new MessageMain(R.drawable.timg,"Java04","19-2-20 17:02","Williamwu","Hi, how are you?");
-//        messagelist.add(a);
-//        MessageMain b = new MessageMain(R.drawable.timg,"Java03","19-2-10 10:58","Williamwu","Nice to meet you");
-//        messagelist.add(b);
-//        MessageMain c = new MessageMain(R.drawable.timg,"OS04","19-2-09 12:02","Williamwu","你好");
-//        messagelist.add(c);
-//        MessageMain d = new MessageMain(R.drawable.timg,"Dotnet04","19-1-31 13:28","Williamwu","约吗");
-//        messagelist.add(d);
     }
 
     //个人信息,放入sp

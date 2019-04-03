@@ -83,8 +83,13 @@ public class Checkin_result extends Activity {
                 System.out.println("uname = "+uname);
                 System.out.println("chid = "+chid);
                 System.out.println("distance = "+distance);
-                CheckinHistoryItem sc1 = new CheckinHistoryItem(uname, distance);
-                checkinlist.add(sc1);
+                if(distance.equals("-1")) {
+                    CheckinHistoryItem sc1 = new CheckinHistoryItem(uname, "未签到");
+                    checkinlist.add(sc1);
+                }else{
+                    CheckinHistoryItem sc1 = new CheckinHistoryItem(uname, distance+"米");
+                    checkinlist.add(sc1);
+                }
                 Checkinresult cr = new Checkinresult();
                 cr.setChid(Integer.parseInt(chid));
                 cr.setUid(Integer.parseInt(uid));

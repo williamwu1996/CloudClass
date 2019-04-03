@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.Util.ChatServerConnection;
 import com.Util.DistanceUtil;
@@ -23,6 +24,8 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.MultiUserChatManager;
+import org.jivesoftware.smackx.xdata.Form;
+import org.jivesoftware.smackx.xdata.FormField;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jxmpp.jid.impl.JidCreate;
@@ -31,6 +34,8 @@ import org.jxmpp.jid.parts.Resourcepart;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -82,6 +87,11 @@ public class Checkin_going extends Activity {
         Intent intent = getIntent();
         teacher_longitude = intent.getStringExtra("longitude");
         teacher_latitude = intent.getStringExtra("latitude");
+        Toast.makeText(this,"Longitude is "+teacher_longitude,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,"Latitude is "+teacher_latitude,Toast.LENGTH_SHORT).show();
+        System.out.println("-------------------------Checkin going-------------------------");
+        System.out.println(teacher_latitude);
+        System.out.println(teacher_longitude);
         cid = intent.getStringExtra("cid");
         code = intent.getStringExtra("code");
         checkincode.setText("签到码："+code);
@@ -138,8 +148,7 @@ public class Checkin_going extends Activity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String body = response.body().string();
-                System.out.println("--------------------------------Member List-------------------------------");
-                System.out.println(body);
+                System.out.println("--------------------------------Member List-------------------------------"+body);
                 insertData(body);
             }
         });
@@ -161,6 +170,7 @@ public class Checkin_going extends Activity {
                 db.insert("checkin",null,values);
                 values.clear();
             }
+            testCheckdata();
             createChatroom();
         }catch (Exception e){
             e.printStackTrace();
@@ -220,25 +230,39 @@ public class Checkin_going extends Activity {
     String jid;
     public void createChatroom(){
         jid = roomnum+"@conference.129.204.207.18";
+//        jid = "12345678"+"@conference.129.204.207.18";
         XMPPConnection connection = ChatServerConnection.getConnection();
         try{
             MultiUserChat muc = MultiUserChatManager.getInstanceFor(connection).getMultiUserChat(JidCreate.entityBareFrom(jid));
-            muc.create(Resourcepart.from("teacher"));
+
+            muc.createOrJoin(Resourcepart.from("teacher"));
+            Form form = muc.getConfigurationForm();
+            Form submitForm = form.createAnswerForm();
+            submitForm.setAnswer("muc#roomconfig_roomname",roomnum+"00000");
+            muc.sendConfigurationForm(submitForm);
+
+
             //todo 接收签到消息尚未测试
             muc.addMessageListener(new MessageListener() {
                 @Override
                 public void processMessage(Message message) {
                     //更新数据库
                     //uid, name, longitude, latitude, #隔开
+                    System.out.println("--------------------receive message---------------------");
+                    System.out.println("--------------------receive message---------------------"+message.getBody());
                     String[] content = message.getBody().split("#");
                     String uid = content[0];
                     String name = content[1];
                     String longitude = content[2];
                     String latitude = content[3];
+                    System.out.println("My lat "+teacher_latitude);
+                    System.out.println("My log "+teacher_longitude);
+                    System.out.println("Your lat "+latitude);
+                    System.out.println("Your log "+longitude);
+                    System.out.println(DistanceUtil.GetDistance(Double.parseDouble(teacher_latitude),Double.parseDouble(teacher_longitude),Double.parseDouble(latitude),Double.parseDouble(longitude)));
                     int distance = (int) DistanceUtil.GetDistance(Double.parseDouble(teacher_latitude),Double.parseDouble(teacher_longitude),Double.parseDouble(latitude),Double.parseDouble(longitude));
-                    ContentValues values = new ContentValues();
-                    values.put("distance", distance);//key为字段名，value为值
-                    db.update("checkin", values, "chid = ? and uid = ?", new String[]{chid,uid});
+                    System.out.println("Int distance "+distance);
+                    db.execSQL("update checkin set distance = "+distance+" where chid = "+chid+" and uid = "+uid);
                     testCheckdata();
                 }
             });
