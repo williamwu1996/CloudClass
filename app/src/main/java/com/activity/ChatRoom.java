@@ -45,9 +45,10 @@ public class ChatRoom extends Activity {
     EntityBareJid jid = null;
     SQLiteDatabase db = SplashActivity.dbHelper.getWritableDatabase();
     Button back,clearhis;
-
+    String chatusername;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        chatusername = getIntent().getExtras().getString("chatusername");
         userFrom=getIntent().getExtras().getString("chatuser");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chatroom);
@@ -74,11 +75,11 @@ public class ChatRoom extends Activity {
                 String isread = cursor.getString(cursor.getColumnIndex("isread"));
                 if(sender.equals(s.replace("@","#"))){
                     android.os.Message mm = new android.os.Message();
-                    mm.obj = "me:" + content;
+                    mm.obj = "我:" + content;
                     mhandle.handleMessage(mm);
                 }else{
                     android.os.Message mm = new android.os.Message();
-                    mm.obj = sender +":"+ content;
+                    mm.obj = "Ta说" +":"+ content;
                     mhandle.handleMessage(mm);
                 }
             }while (cursor.moveToNext());
@@ -144,7 +145,7 @@ public class ChatRoom extends Activity {
             public void onClick(View v) {
                 final String msg_content = send_msg.getText().toString();
                 android.os.Message mm = new android.os.Message();
-                mm.obj = "me:" + msg_content;
+                mm.obj = "我:" + msg_content;
                 mhandle.handleMessage(mm);
                 System.out.println(msg_content);
                 try {

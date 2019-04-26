@@ -27,7 +27,7 @@ public class MyChatManagerListener implements ChatManagerListener {
 
                     System.out.println("==========收到消息  From：==========="+msg.getFrom());
                     System.out.println("==========收到消息  say：===========" + msg.getBody());
-                    ChatRoom.mConversationArrayAdapter.add(msg.getFrom()+"say:"+msg.getBody());
+                    ChatRoom.mConversationArrayAdapter.add("Ta说"+":"+msg.getBody());
 
                 }
             }

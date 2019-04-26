@@ -89,8 +89,6 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
     Button exit;
     ImageView headpic;
     TextView personname;
-
-//    public static MyDatabaseHelper dbHelper;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -128,28 +126,23 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main_page);
         headpic = findViewById(R.id.me_person_image);
         personname = findViewById(R.id.me_personname);
-//        dbHelper = new MyDatabaseHelper(this,"cloudchat.db",null,1);
-//        dbHelper.getWritableDatabase();
         ChatManager chatManager = ChatManager.getInstanceFor(ChatServerConnection.getConnection());
         chatManager.addChatListener(new MyChatManagerListener());
 
         SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         t = sp.getString("userid","");
 
-
-
         initHeadpic(t);
         initPerson(t);
-//        initMessageList();
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
             actionBar.hide();
         }
+
         exit = findViewById(R.id.me_exit_button);
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,10 +166,8 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
         });
 
         messageadapter = new MessageAdapter(messagelist);
-
         classadapter = new ClassAdapter(classlist);
         listView = findViewById(R.id.list_view);
-//        listView.setAdapter(classadapter);
 
         listViewmessage = findViewById(R.id.list_view_message);
         listViewmessage.setAdapter(null);
@@ -184,16 +175,17 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TextView tv = view.findViewById(R.id.message_fromclass);
+                TextView personname = view.findViewById(R.id.message_personname);
                 String email = tv.getText().toString();
                 String temp = email.replace("@","#");
                 Intent intent = new Intent();
                 intent.putExtra("chatuser",temp+"@129.204.207.18");
+                intent.putExtra("chatusername",personname.getText().toString());
                 intent.setClass(MainPage.this, ChatRoom.class);
-//                startActivity(intent);
                 startActivityForResult(intent,1);
-                Toast.makeText(getApplicationContext(),
-                        "Chat with " + temp,
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(),
+//                        "Chat with " + temp,
+//                        Toast.LENGTH_SHORT).show();
                 messageadapter.notifyDataSetChanged();
             }
         });
@@ -347,21 +339,13 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
         {
             if(resultCode == RESULT_CANCELED)
             {
-//                ContentValues values = new ContentValues();
-//                values.put("isread", "Y");//key为字段名，value为值
                 listViewmessage.setAdapter(messageadapter);
                 listView.setAdapter(null);
-//                db.update("chathistory", values, "sender", new String[]{me.replace("@","#")});
-//                db.update("chathistory", values, "receiver", new String[]{me.replace("@","#")});
             }
             else
             {
                 listViewmessage.setAdapter(messageadapter);
                 listView.setAdapter(null);
-//                ContentValues values = new ContentValues();
-//                values.put("isread", "Y");//key为字段名，value为值
-//                db.update("chathistory", values, "sender", new String[]{me.replace("@","#")});
-//                db.update("chathistory", values, "receiver", new String[]{me.replace("@","#")});
             }
         }
     }
@@ -371,7 +355,6 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
         int id = v.getId();
         switch (id){
             case R.id.pop_add_class:{
-
                 Intent intent = new Intent(MainPage.this,Create_class_info.class);
                 startActivity(intent);
                 mPopWindow.dismiss();
@@ -386,10 +369,6 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
             break;
             case R.id.pop_cancel:{
                 //切换界面
-//                Intent intent=new Intent(this, MainPage.class);
-//                startActivity(intent);
-//                finish();//关闭自己
-//                overridePendingTransition(0, 0);
                 mPopWindow.dismiss();
             }
             break;
@@ -435,8 +414,6 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
         if(cursor.moveToFirst()){
             do{
                 String email = cursor.getString(cursor.getColumnIndex("sender"));
-//                Email e = new Email();
-//                e.setEmail(email);
                 emails.add(email);
             }while (cursor.moveToNext());
         }
@@ -445,8 +422,6 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
         if(cursor1.moveToFirst()){
             do{
                 String email = cursor1.getString(cursor1.getColumnIndex("receiver"));
-//                Email e = new Email();
-//                e.setEmail(email);
                 emails.add(email);
             }while (cursor1.moveToNext());
         }
@@ -456,7 +431,6 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
         for(String e:emails){
             testinfo += e+"@";
         }
-//        System.out.println("testinfo is "+testinfo);
         //發送testinfo返回users
         String url = "http://129.204.207.18:8079/users/getusers";
         OkHttpClient okHttpClient = new OkHttpClient();

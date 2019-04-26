@@ -244,16 +244,15 @@ public class Teacher_class_main extends AppCompatActivity {
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
                                     long arg3) {
                 TextView tv = arg1.findViewById(R.id.student_main_members_email);
+                TextView personname = arg1.findViewById(R.id.student_main_members_name);
                 String email = tv.getText().toString();
                 String temp = email.replace("@","#");
                 Intent intent = new Intent();
                 intent.putExtra("chatuser",temp+"@129.204.207.18");
+                intent.putExtra("chatusername",personname.getText().toString());
                 intent.setClass(Teacher_class_main.this, ChatRoom.class);
 //                startActivity(intent);
                 startActivityForResult(intent,3);
-                Toast.makeText(getApplicationContext(),
-                        "Chat with " + temp,
-                        Toast.LENGTH_SHORT).show();
                 memberAdapter.notifyDataSetChanged();
             }
         });

@@ -9,7 +9,7 @@
         android:id="@+id/checkin_history_name"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:text="吴玠璘"
+        android:text="姓名"
         android:layout_gravity="center_vertical"
         android:textColor="#000"
         android:textSize="17dp"
@@ -19,7 +19,7 @@
         android:id="@+id/checkin_history_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="已签到"
+        android:text="签到状态"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="200dp"/>
 </LinearLayout>
