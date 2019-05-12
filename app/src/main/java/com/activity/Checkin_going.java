@@ -104,7 +104,7 @@ public class Checkin_going extends Activity {
     }
 
     public void endCheckin(){
-        String url = "http://192.168.3.169:8079/checkin/closecheckin";
+        String url = "http://129.204.207.18:8079/checkin/closecheckin";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("chid", chid);
@@ -129,7 +129,7 @@ public class Checkin_going extends Activity {
     }
 
     public void getAllStudent(){
-        String url = "http://192.168.3.169:8079/course/getstudents";
+        String url = "http://129.204.207.18:8079/course/getstudents";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("cid", cid);
@@ -200,7 +200,7 @@ public class Checkin_going extends Activity {
         String timeStamp = TimeUtils.timeStamp();
         String date = TimeUtils.timeStamp2Date(timeStamp, "yyyy-MM-dd HH:mm:ss");
         String timeStamp2 = TimeUtils.date2TimeStamp(date, "yyyy-MM-dd HH:mm:ss");
-        String url = "http://192.168.3.169:8079/checkin/startcheckin";
+        String url = "http://129.204.207.18:8079/checkin/startcheckin";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("checktime", date);

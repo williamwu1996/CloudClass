@@ -43,7 +43,7 @@ public class Join_class_code extends Activity {
             @Override
             public void onClick(View arg0) {
                 //检查是否存在，若存在存到intent进入下一页
-                String url = "http://192.168.3.169:8079/course/checkclassexist";
+                String url = "http://129.204.207.18:8079/course/checkclassexist";
                 OkHttpClient okHttpClient = new OkHttpClient();
                 FormBody.Builder formBody = new FormBody.Builder();
                 formBody.add("cid", code.getText().toString());

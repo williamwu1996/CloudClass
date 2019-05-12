@@ -70,7 +70,7 @@ public class Teacher_homework_check_main extends Activity {
     public void initHomeworkList(){
         Intent intent = getIntent();
         String hid = intent.getStringExtra("hid");
-        String url = "http://192.168.3.169:8079/homework/getresult";
+        String url = "http://129.204.207.18:8079/homework/getresult";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("hid",hid);

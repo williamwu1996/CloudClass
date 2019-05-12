@@ -161,7 +161,7 @@ public class Teacher_class_main extends AppCompatActivity {
         tvclassname.setText(classname);
         tvprofile.setText(profile);
         tvclasscode.setText(cid);
-        initClasscover(cid);
+//        initClasscover(cid);
 
         title = findViewById(R.id.teacher_class_title);
         title.setText(coursename);
@@ -250,8 +250,10 @@ public class Teacher_class_main extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.putExtra("chatuser",temp+"@129.204.207.18");
                 intent.putExtra("chatusername",personname.getText().toString());
-                intent.setClass(Teacher_class_main.this, ChatRoom.class);
-//                startActivity(intent);
+                intent.putExtra("email",email);
+                intent.putExtra("cid",cid);
+//                intent.setClass(Teacher_class_main.this, ChatRoom.class);
+                intent.setClass(Teacher_class_main.this, StudentDetail.class);
                 startActivityForResult(intent,3);
                 memberAdapter.notifyDataSetChanged();
             }
@@ -271,7 +273,7 @@ public class Teacher_class_main extends AppCompatActivity {
         tabHost.addTab(tabHost.newTabSpec("").setIndicator("已结束")
                 .setContent(R.id.teacher_homework_concluded_tab));
 
-        initHomework(cid);
+//        initHomework(cid);
 
 
         dnsAdapter = new HomeworkItemAdapter(Teacher_class_main.this,R.layout.homework_item, dnslist);
@@ -340,7 +342,7 @@ public class Teacher_class_main extends AppCompatActivity {
             }
         });
 
-        getStudents();
+//        getStudents();
         getResources(cid);
     }
 
@@ -413,7 +415,7 @@ public class Teacher_class_main extends AppCompatActivity {
     }
 
     public void getResources(String cid){
-        String url = "http://192.168.3.169:8079/resource/getclassresources";
+        String url = "http://129.204.207.18:8079/resource/getclassresources";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("cid", cid);
@@ -451,6 +453,7 @@ public class Teacher_class_main extends AppCompatActivity {
         }catch (Exception e){
             e.printStackTrace();
         }
+        getStudents();
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -522,7 +525,7 @@ public class Teacher_class_main extends AppCompatActivity {
     }
     SQLiteDatabase db = SplashActivity.dbHelper.getWritableDatabase();
     public void getStudents(){
-        String url = "http://192.168.3.169:8079/course/getstudents";
+        String url = "http://129.204.207.18:8079/course/getstudents";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("cid", cid);
@@ -550,6 +553,7 @@ public class Teacher_class_main extends AppCompatActivity {
         Intent intent = getIntent();
         String cid = intent.getStringExtra("cid");
         String uid = intent.getStringExtra("uid");
+        memberlist.clear();
         try{
             String url = "http://129.204.207.18:8079/resource/img/head_pic/";
             JSONArray jsonArray = new JSONArray(json);
@@ -560,9 +564,11 @@ public class Teacher_class_main extends AppCompatActivity {
                 StudentMemberItem c = new StudentMemberItem(url+obj.getString("uid")+".JPG",obj.getString("name"),obj.getString("email"));
                 memberlist.add(c);
             }
+            initHomework(cid);
         }catch (Exception e){
             e.printStackTrace();
         }
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -600,7 +606,7 @@ public class Teacher_class_main extends AppCompatActivity {
     };
 
     public void initHomework(String cid){
-        String url = "http://192.168.3.169:8079/homework/gethomeworks";
+        String url = "http://129.204.207.18:8079/homework/gethomeworks";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("cid", cid);
@@ -643,6 +649,7 @@ public class Teacher_class_main extends AppCompatActivity {
                 }
 
             }
+            initClasscover(cid);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -661,7 +668,7 @@ public class Teacher_class_main extends AppCompatActivity {
         super.onResume();
 //        getStudents();
         getResources(cid);
-        initHomework(cid);
-        initClasscover(cid);
+//        initHomework(cid);
+//        initClasscover(cid);
     }
 }

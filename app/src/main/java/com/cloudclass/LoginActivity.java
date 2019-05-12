@@ -81,7 +81,7 @@ public class LoginActivity extends Activity {
                     userPwd = edt_password.getText().toString();
                     System.out.println("username:"+userName);
                     System.out.println("password"+userPwd);
-                    String url = "http://192.168.3.169:8079/users/login";
+                    String url = "http://129.204.207.18:8079/users/login";
                     OkHttpClient okHttpClient = new OkHttpClient();
                     FormBody.Builder formBody = new FormBody.Builder();
                     formBody.add("email", userName);

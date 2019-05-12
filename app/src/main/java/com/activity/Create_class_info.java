@@ -85,7 +85,7 @@ public class Create_class_info extends Activity implements View.OnClickListener 
                     String uid = sp.getString("userid", "");
                     String prof = profile.getText().toString();
                     String classn = classname.getText().toString();
-                    String url = "http://192.168.3.169:8079/course/create";
+                    String url = "http://129.204.207.18:8079/course/create";
                     String personname = sp.getString("personname","");
                     OkHttpClient okHttpClient = new OkHttpClient();
                     FormBody.Builder formBody = new FormBody.Builder();
@@ -145,7 +145,7 @@ public class Create_class_info extends Activity implements View.OnClickListener 
     }
 
     public void updatedefaultcover(String cid){
-        String url = "http://192.168.3.169:8079/resource/createdefaultcover";
+        String url = "http://129.204.207.18:8079/resource/createdefaultcover";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("cid",cid);
@@ -173,7 +173,7 @@ public class Create_class_info extends Activity implements View.OnClickListener 
                     .build();
 
             Request request=new Request.Builder()
-                    .url("http://192.168.3.169:8079/resource/uploadpic")
+                    .url("http://129.204.207.18:8079/resource/uploadpic")
                     .post(requestBody)
                     .build();
             Response response=client.newCall(request).execute();

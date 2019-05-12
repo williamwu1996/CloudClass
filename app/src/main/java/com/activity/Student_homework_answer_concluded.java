@@ -56,7 +56,7 @@ public class Student_homework_answer_concluded extends Activity {
     }
 
     public void initHomework(String hid, String uid){
-        String url = "http://192.168.3.169:8079/homework/studentgethomeworkresult";
+        String url = "http://129.204.207.18:8079/homework/studentgethomeworkresult";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("hid",hid);

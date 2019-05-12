@@ -63,7 +63,7 @@ public class SplashActivity extends Activity {
         if(userinfo!=null) {
             String email = userinfo.getUserName();
             String password = userinfo.getPassword();
-            String url = "http://192.168.3.169:8079/users/login";
+            String url = "http://129.204.207.18:8079/users/login";
             OkHttpClient okHttpClient = new OkHttpClient();
             FormBody.Builder formBody = new FormBody.Builder();
             formBody.add("email", email);

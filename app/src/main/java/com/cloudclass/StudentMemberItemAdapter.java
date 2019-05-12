@@ -130,7 +130,7 @@ public class StudentMemberItemAdapter extends BaseAdapter {
             Bitmap bitmap = null;
             BitmapFactory.Options options = new BitmapFactory.Options();
 
-            options.inSampleSize = 4; //等于数字n即代表压缩成原来的1/n，当数字小于1时会被当成1
+            options.inSampleSize = 6; //等于数字n即代表压缩成原来的1/n，当数字小于1时会被当成1
 
             options.inJustDecodeBounds = false; //该属性表示是否只是处理图片的一些宽高值。当值为true时，decodeFile()方法返回null，但是options里面的outHeight/outWidth等参数还是会得到对应值
 

@@ -74,7 +74,7 @@ public class Teacher_start_homework extends Activity {
         String titl = title.getText().toString();
         String valu = value.getText().toString();
         String profil = profile.getText().toString();
-        String url = "http://192.168.3.169:8079/homework/addhomework";
+        String url = "http://129.204.207.18:8079/homework/addhomework";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("cid",cid);

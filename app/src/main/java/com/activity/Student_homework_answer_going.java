@@ -73,7 +73,7 @@ public class Student_homework_answer_going extends Activity {
     }
     String answer;
     public void initHomeworkresult(String uid, String hid){
-        String url = "http://192.168.3.169:8079/homework/gethomeworkresult";
+        String url = "http://129.204.207.18:8079/homework/gethomeworkresult";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("uid",uid);
@@ -114,7 +114,7 @@ public class Student_homework_answer_going extends Activity {
     }
 
     public void updateHomeworkresult(){
-        String url = "http://192.168.3.169:8079/homework/doHomework";
+        String url = "http://129.204.207.18:8079/homework/doHomework";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("hrid",hrid);

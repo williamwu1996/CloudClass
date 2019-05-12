@@ -81,7 +81,7 @@ public class Student_checkin extends Activity {
     }
 
     public void getCheckinRecords(){
-        String url = "http://192.168.3.169:8079/checkin/getuserscheckinfo";
+        String url = "http://129.204.207.18:8079/checkin/getuserscheckinfo";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("cid", cid);
@@ -143,7 +143,7 @@ public class Student_checkin extends Activity {
             Manifest.permission.READ_PHONE_STATE};
     public void requestCode(){
         //发送cid,返回班课码
-        String url = "http://192.168.3.169:8079/checkin/getcheckincode";
+        String url = "http://129.204.207.18:8079/checkin/getcheckincode";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("cid", cid);

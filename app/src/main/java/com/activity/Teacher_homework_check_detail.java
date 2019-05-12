@@ -70,7 +70,7 @@ public class Teacher_homework_check_detail extends Activity {
     }
 
     public void initHomework(String hrid){
-        String url = "http://192.168.3.169:8079/homework/getcheckhomework";
+        String url = "http://129.204.207.18:8079/homework/getcheckhomework";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("hrid",hrid);
@@ -126,7 +126,7 @@ public class Teacher_homework_check_detail extends Activity {
     }
 
     public void checkHomework(){
-        String url = "http://192.168.3.169:8079/homework/checkhomework";
+        String url = "http://129.204.207.18:8079/homework/checkhomework";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("hrid",hrid);

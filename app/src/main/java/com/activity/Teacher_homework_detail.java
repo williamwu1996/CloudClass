@@ -53,7 +53,7 @@ public class Teacher_homework_detail extends Activity {
             public void onClick(View v) {
                 Intent intent = getIntent();
                 String hid = intent.getStringExtra("hid");
-                String url = "http://192.168.3.169:8079/homework/closehomework";
+                String url = "http://129.204.207.18:8079/homework/closehomework";
                 OkHttpClient okHttpClient = new OkHttpClient();
                 FormBody.Builder formBody = new FormBody.Builder();
                 formBody.add("hid", hid);
@@ -84,7 +84,7 @@ public class Teacher_homework_detail extends Activity {
                 //删除homework和homeworkresult两个表的数据
                 Intent intent = getIntent();
                 String hid = intent.getStringExtra("hid");
-                String url = "http://192.168.3.169:8079/homework/deletehomework";
+                String url = "http://129.204.207.18:8079/homework/deletehomework";
                 OkHttpClient okHttpClient = new OkHttpClient();
                 FormBody.Builder formBody = new FormBody.Builder();
                 formBody.add("hid", hid);
@@ -111,7 +111,7 @@ public class Teacher_homework_detail extends Activity {
     }
 
     public void getHomework(String hid){
-        String url = "http://192.168.3.169:8079/homework/gethomeworkbyid";
+        String url = "http://129.204.207.18:8079/homework/gethomeworkbyid";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("hid", hid);

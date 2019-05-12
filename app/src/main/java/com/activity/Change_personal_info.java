@@ -238,7 +238,7 @@ public class Change_personal_info extends Activity implements View.OnClickListen
                 }else{
                     pgender = "F";
                 }
-                String url = "http://192.168.3.169:8079/users/update";
+                String url = "http://129.204.207.18:8079/users/update";
                 OkHttpClient okHttpClient = new OkHttpClient();
                 FormBody.Builder formBody = new FormBody.Builder();
                 formBody.add("uid",userid);
@@ -285,7 +285,7 @@ public class Change_personal_info extends Activity implements View.OnClickListen
                     .build();
 
             Request request=new Request.Builder()
-                    .url("http://192.168.3.169:8079/resource/uploadpic")
+                    .url("http://129.204.207.18:8079/resource/uploadpic")
                     .post(requestBody)
                     .build();
             Response response=client.newCall(request).execute();

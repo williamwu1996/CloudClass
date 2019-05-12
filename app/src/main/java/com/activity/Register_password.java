@@ -73,7 +73,7 @@ public class Register_password extends Activity {
     }
 
     public void register(final String address, final String password){
-        String url = "http://192.168.3.169:8079/users/register";
+        String url = "http://129.204.207.18:8079/users/register";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("email",address);

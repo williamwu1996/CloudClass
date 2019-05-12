@@ -135,8 +135,9 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
         SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         t = sp.getString("userid","");
 
-        initHeadpic(t);
-        initPerson(t);
+        getAllClass();
+//        initHeadpic(t);
+//        initPerson(t);
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
@@ -183,9 +184,6 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
                 intent.putExtra("chatusername",personname.getText().toString());
                 intent.setClass(MainPage.this, ChatRoom.class);
                 startActivityForResult(intent,1);
-//                Toast.makeText(getApplicationContext(),
-//                        "Chat with " + temp,
-//                        Toast.LENGTH_SHORT).show();
                 messageadapter.notifyDataSetChanged();
             }
         });
@@ -218,7 +216,7 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
             }
         });
 
-        getMessageMember();
+//        getMessageMember();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -263,7 +261,7 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
     }
 
     public void getAllClass(){
-        String url = "http://192.168.3.169:8079/course/getallclass";
+        String url = "http://129.204.207.18:8079/course/getallclass";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("uid", t);
@@ -392,8 +390,8 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
                     ClassMain c = new ClassMain(url+obj.getJSONObject("course").getInt("cid")+".png", "", obj.getJSONObject("course").getString("classname"), obj.getJSONObject("course").getString("cname"), obj.getString("teacherName"), String.valueOf(obj.getJSONObject("course").getInt("cid")),obj.getJSONObject("course").getString("profile"));
                     classlist.add(c);
                 }
-
             }
+            initPerson(t);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -478,7 +476,7 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
 
     //个人信息,放入sp
     public void initPerson(String id){
-        String url = "http://192.168.3.169:8079/users/getuserinfo";
+        String url = "http://129.204.207.18:8079/users/getuserinfo";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("uid", id);
@@ -507,7 +505,7 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
                 }catch (Exception e){
                     e.printStackTrace();
                 }
-
+                initHeadpic(t);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -537,6 +535,7 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
                 Message msg = new Message();
                 msg.obj = bitmap;
                 handler.sendMessage(msg);
+                getMessageMember();
             }
         });
     }
@@ -549,10 +548,9 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
     @Override
     protected void onResume() {
         super.onResume();
-        initHeadpic(t);
-        initPerson(t);
-//        initMessageList();
-        getMessageMember();
+//        initHeadpic(t);
+//        initPerson(t);
+//        getMessageMember();
         getAllClass();
     }
 

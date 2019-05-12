@@ -81,7 +81,7 @@ public class Change_password extends Activity {
     public void changePass(String password){
         SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         String userid = sp.getString("userid","");
-        String url = "http://192.168.3.169:8079/users/updatepassword";
+        String url = "http://129.204.207.18:8079/users/updatepassword";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("uid",userid);

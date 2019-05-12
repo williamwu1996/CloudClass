@@ -127,7 +127,7 @@ public class Teacher_resource_upload_pic extends Activity implements View.OnClic
                     .addFormDataPart("cid",cid)
                     .build();
             Request request=new Request.Builder()
-                    .url("http://192.168.3.169:8079/resource/uploadfile")
+                    .url("http://129.204.207.18:8079/resource/uploadfile")
                     .post(requestBody)
                     .build();
 //            Response response=client.newCall(request).execute();

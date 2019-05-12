@@ -362,7 +362,7 @@ public class Teacher_class_edit_detail extends Activity implements View.OnClickL
     };
 
     public void updateClass(String cid, String classname, String coursename, String profile){
-        String url = "http://192.168.3.169:8079/course/updatecourse";
+        String url = "http://129.204.207.18:8079/course/updatecourse";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("cid", cid);
@@ -407,7 +407,7 @@ public class Teacher_class_edit_detail extends Activity implements View.OnClickL
                     .addFormDataPart("path","\\cover\\" + cid + ".png")
                     .build();
             Request request=new Request.Builder()
-                    .url("http://192.168.3.169:8079/resource/uploadpic")
+                    .url("http://129.204.207.18:8079/resource/uploadpic")
                     .post(requestBody)
                     .build();
             Response response=client.newCall(request).execute();

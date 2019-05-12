@@ -43,7 +43,7 @@ public class Forget_email extends Activity {
                 if(!CheckEmailAddr.isEmail(address.getText().toString())){
                     showEmpty();
                 }else {
-                    String url = "http://192.168.3.169:8079/users/emailCheck";
+                    String url = "http://129.204.207.18:8079/users/emailCheck";
                     OkHttpClient okHttpClient = new OkHttpClient();
                     FormBody.Builder formBody = new FormBody.Builder();
                     formBody.add("email", address.getText().toString());

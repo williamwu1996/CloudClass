@@ -117,7 +117,7 @@ public class Checkin_result extends Activity {
             e.printStackTrace();
         }
         System.out.println(json.toString());
-        String url = "http://192.168.3.169:8079/checkin/userscheckin";
+        String url = "http://129.204.207.18:8079/checkin/userscheckin";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("result", json.toString());

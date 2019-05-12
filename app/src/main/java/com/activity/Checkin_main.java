@@ -114,7 +114,7 @@ public class Checkin_main extends Activity {
     }
 
     public void getCheckinRecords(){
-        String url = "http://192.168.3.169:8079/checkin/teachergetcheckinrecords";
+        String url = "http://129.204.207.18:8079/checkin/teachergetcheckinrecords";
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("cid",cid);

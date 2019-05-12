@@ -148,8 +148,8 @@ public class ClassAdapter extends BaseAdapter {
             try {
                 URL url = new URL(imageUrl);
                 con = (HttpURLConnection) url.openConnection();
-                con.setConnectTimeout(5 * 1000);
-                con.setReadTimeout(10 * 1000);
+                con.setConnectTimeout(20 * 1000);
+                con.setReadTimeout(60 * 1000);
                 bitmap = BitmapFactory.decodeStream(con.getInputStream());
             } catch (MalformedURLException e) {
                 e.printStackTrace();
