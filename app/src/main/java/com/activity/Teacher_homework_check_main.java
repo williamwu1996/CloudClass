@@ -54,13 +54,14 @@ public class Teacher_homework_check_main extends Activity {
         homeworkListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView hrid = findViewById(R.id.student_checkin_history_id);
-                TextView score = findViewById(R.id.student_checkin_history_status);
+                TextView hrid = view.findViewById(R.id.student_checkin_history_id);
+                TextView score = view.findViewById(R.id.student_checkin_history_status);
                 if((score.getText().toString()).equals("未提交")){
 
                 }else {
                     Intent intent = new Intent(Teacher_homework_check_main.this, Teacher_homework_check_detail.class);
                     intent.putExtra("hrid", hrid.getText().toString());
+                    intent.putExtra("score",score.getText().toString());
                     startActivity(intent);
                 }
             }
@@ -93,6 +94,7 @@ public class Teacher_homework_check_main extends Activity {
 
     public void initUI(String json){
         try {
+            checkinlist.clear();
             JSONArray jsonArray = new JSONArray(json);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
@@ -116,5 +118,11 @@ public class Teacher_homework_check_main extends Activity {
                 homeworkListView.setAdapter(homeworkAdapter);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initHomeworkList();
     }
 }

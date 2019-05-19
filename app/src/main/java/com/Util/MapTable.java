@@ -48,7 +48,7 @@ public class MapTable {
             {".msg", "application/vnd.ms-outlook"},
             {".ogg", "audio/ogg"},
             {".pdf", "application/pdf"},
-            {".png", "image/png"},
+            {".jpg", "image/png"},
             {".pps", "application/vnd.ms-powerpoint"},
             {".ppt", "application/vnd.ms-powerpoint"},
             {".pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"},

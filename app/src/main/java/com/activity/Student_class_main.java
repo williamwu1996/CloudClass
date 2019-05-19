@@ -254,10 +254,10 @@ public class Student_class_main extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-                TextView hid = findViewById(R.id.homework_item_id);
-                TextView value = findViewById(R.id.homework_item_value);
-                TextView title = findViewById(R.id.homework_item_title);
-                TextView profile = findViewById(R.id.homework_item_profile);
+                TextView hid = view.findViewById(R.id.homework_item_id);
+                TextView value = view.findViewById(R.id.homework_item_value);
+                TextView title = view.findViewById(R.id.homework_item_title);
+                TextView profile = view.findViewById(R.id.homework_item_profile);
 
                 Intent intent = new Intent(Student_class_main.this,Student_homework_answer_going.class);
                 intent.putExtra("hid",hid.getText().toString());
@@ -274,10 +274,10 @@ public class Student_class_main extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-                TextView hid = findViewById(R.id.homework_item_id);
-                TextView value = findViewById(R.id.homework_item_value);
-                TextView title = findViewById(R.id.homework_item_title);
-                TextView profile = findViewById(R.id.homework_item_profile);
+                TextView hid = view.findViewById(R.id.homework_item_id);
+                TextView value = view.findViewById(R.id.homework_item_value);
+                TextView title = view.findViewById(R.id.homework_item_title);
+                TextView profile = view.findViewById(R.id.homework_item_profile);
 
                 Intent intent = new Intent(Student_class_main.this,Student_homework_answer_concluded.class);
                 intent.putExtra("hid",hid.getText().toString());
@@ -516,6 +516,7 @@ public class Student_class_main extends AppCompatActivity {
         Intent intent = getIntent();
         String cid = intent.getStringExtra("cid");
         String uid = intent.getStringExtra("uid");
+        memberlist.clear();
         try{
             String url = "http://129.204.207.18:8079/resource/img/head_pic/";
             JSONArray jsonArray = new JSONArray(json);
@@ -537,7 +538,7 @@ public class Student_class_main extends AppCompatActivity {
     }
 
     public void initClasscover(String cid){
-        String url = "http://129.204.207.18:8079/resource/img/cover/"+cid+".png";
+        String url = "http://129.204.207.18:8079/resource/img/cover/"+cid+".jpg";
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)

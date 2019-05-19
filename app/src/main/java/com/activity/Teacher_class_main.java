@@ -281,7 +281,7 @@ public class Teacher_class_main extends AppCompatActivity {
         dnsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView hid = findViewById(R.id.homework_item_id);
+                TextView hid = view.findViewById(R.id.homework_item_id);
                 Intent intent = new Intent(Teacher_class_main.this,Teacher_edit_homework.class);
                 intent.putExtra("hid",hid.getText().toString());
                 startActivity(intent);
@@ -293,7 +293,7 @@ public class Teacher_class_main extends AppCompatActivity {
         goingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView hid = findViewById(R.id.homework_item_id);
+                TextView hid = view.findViewById(R.id.homework_item_id);
                 Intent intent = new Intent(Teacher_class_main.this,Teacher_homework_detail.class);
                 intent.putExtra("hid",hid.getText().toString());
                 startActivity(intent);
@@ -305,7 +305,7 @@ public class Teacher_class_main extends AppCompatActivity {
         concludedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView hid = findViewById(R.id.homework_item_id);
+                TextView hid = view.findViewById(R.id.homework_item_id);
                 Intent intent = new Intent(Teacher_class_main.this,Teacher_homework_check_main.class);
                 intent.putExtra("hid",hid.getText().toString());
                 startActivity(intent);
@@ -578,7 +578,7 @@ public class Teacher_class_main extends AppCompatActivity {
     }
 
     public void initClasscover(String cid){
-        String url = "http://129.204.207.18:8079/resource/img/cover/"+cid+".png";
+        String url = "http://129.204.207.18:8079/resource/img/cover/"+cid+".jpg";
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)

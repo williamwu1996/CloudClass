@@ -384,10 +384,10 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
             for(int i=0;i<jsonArray.length();i++){
                 JSONObject obj = jsonArray.getJSONObject(i);
                 if((obj.getJSONObject("course").getString("teacher")).equals(id)) {
-                    ClassMain c = new ClassMain(url+obj.getJSONObject("course").getInt("cid")+".png", String.valueOf(obj.getJSONObject("course").getInt("cid")), obj.getJSONObject("course").getString("classname"), obj.getJSONObject("course").getString("cname"), obj.getString("teacherName"), String.valueOf(obj.getJSONObject("course").getInt("cid")),obj.getJSONObject("course").getString("profile"));
+                    ClassMain c = new ClassMain(url+obj.getJSONObject("course").getInt("cid")+".jpg", String.valueOf(obj.getJSONObject("course").getInt("cid")), obj.getJSONObject("course").getString("classname"), obj.getJSONObject("course").getString("cname"), obj.getString("teacherName"), String.valueOf(obj.getJSONObject("course").getInt("cid")),obj.getJSONObject("course").getString("profile"));
                     classlist.add(c);
                 }else{
-                    ClassMain c = new ClassMain(url+obj.getJSONObject("course").getInt("cid")+".png", "", obj.getJSONObject("course").getString("classname"), obj.getJSONObject("course").getString("cname"), obj.getString("teacherName"), String.valueOf(obj.getJSONObject("course").getInt("cid")),obj.getJSONObject("course").getString("profile"));
+                    ClassMain c = new ClassMain(url+obj.getJSONObject("course").getInt("cid")+".jpg", "", obj.getJSONObject("course").getString("classname"), obj.getJSONObject("course").getString("cname"), obj.getString("teacherName"), String.valueOf(obj.getJSONObject("course").getInt("cid")),obj.getJSONObject("course").getString("profile"));
                     classlist.add(c);
                 }
             }
@@ -403,8 +403,12 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
         });
     }
 
-    SQLiteDatabase db = SplashActivity.dbHelper.getWritableDatabase();
+//    SQLiteDatabase db = SplashActivity.dbHelper.getWritableDatabase();
+    public static MyDatabaseHelper dbHelper;
+
     public void getMessageMember(){
+        dbHelper = new MyDatabaseHelper(this,"cloudchat.db",null,1);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         String me = sp.getString("USER_NAME","");//732315805@qq.com
         Set<String> emails = new HashSet<>();
@@ -510,7 +514,11 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
                     @Override
                     public void run() {
                         SharedPreferences sp = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-                        personname.setText(sp.getString("personname",""));
+                        if((sp.getString("personname","")).equals("")||(sp.getString("personname","")).equals("null")||(null==sp.getString("personname",""))){
+                            personname.setText("未设置姓名");
+                        }else {
+                            personname.setText(sp.getString("personname", ""));
+                        }
                     }
                 });
             }
@@ -548,9 +556,6 @@ public class MainPage extends AppCompatActivity implements View.OnClickListener{
     @Override
     protected void onResume() {
         super.onResume();
-//        initHeadpic(t);
-//        initPerson(t);
-//        getMessageMember();
         getAllClass();
     }
 

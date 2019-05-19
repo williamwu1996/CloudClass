@@ -36,6 +36,7 @@ public class Teacher_homework_check_detail extends Activity {
         setContentView(R.layout.teacher_homework_check_detail);
         Intent intent = getIntent();
         hrid = intent.getStringExtra("hrid");
+        score = intent.getStringExtra("score").split("分")[0];
 
         tvvalue = findViewById(R.id.teacher_homework_check_detail_questionvalue);
         tvtitle = findViewById(R.id.teacher_homework_check_detail_title);
@@ -103,7 +104,7 @@ public class Teacher_homework_check_detail extends Activity {
                 if(obj.getInt("score")==-1){
                     score = "";
                 }else{
-                    score = String.valueOf(obj.getInt("value"));
+//                    score = String.valueOf(obj.getInt("value"));
                 }
                 value = String.valueOf(obj.getInt("value"));
                 title = String.valueOf(obj.getString("title"));

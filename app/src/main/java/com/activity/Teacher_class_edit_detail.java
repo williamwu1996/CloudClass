@@ -334,7 +334,7 @@ public class Teacher_class_edit_detail extends Activity implements View.OnClickL
     }
 
     public void initClasscover(String cid){
-        String url = "http://129.204.207.18:8079/resource/img/cover/"+cid+".png";
+        String url = "http://129.204.207.18:8079/resource/img/cover/"+cid+".jpg";
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
@@ -404,7 +404,7 @@ public class Teacher_class_edit_detail extends Activity implements View.OnClickL
             RequestBody fileBody = RequestBody.create(MediaType.parse("image/png"), imgFile);//将file转换成RequestBody文件
             RequestBody requestBody=new MultipartBody.Builder()
                     .addFormDataPart("file","", fileBody)
-                    .addFormDataPart("path","\\cover\\" + cid + ".png")
+                    .addFormDataPart("path","\\cover\\" + cid + ".jpg")
                     .build();
             Request request=new Request.Builder()
                     .url("http://129.204.207.18:8079/resource/uploadpic")

@@ -55,7 +55,7 @@ public class Teacher_edit_homework extends Activity {
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updatehomework("dns");
+                updatehomework("going");
             }
         });
 
@@ -63,7 +63,7 @@ public class Teacher_edit_homework extends Activity {
         notpost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updatehomework("going");
+                updatehomework("dns");
             }
         });
 
@@ -107,6 +107,12 @@ public class Teacher_edit_homework extends Activity {
         Intent intent = getIntent();
         String hid = intent.getStringExtra("hid");
         String url = "http://129.204.207.18:8079/homework/updateInfo";
+        System.out.println("------------update info------------");
+        System.out.println("hid is "+hid);
+        System.out.println("status is "+status);
+        System.out.println("value is "+tvvalue.getText().toString());
+        System.out.println("profile is "+tvprofile.getText().toString());
+        System.out.println("question is "+tvtitle.getText().toString());
         OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBody = new FormBody.Builder();
         formBody.add("hid", hid);

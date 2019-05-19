@@ -47,6 +47,11 @@ public class Student_homework_answer_going extends Activity {
         String title = intent.getStringExtra("title");
         String profile = intent.getStringExtra("profile");
 
+        System.out.println("----------------homework info--------------");
+        System.out.println("uid is "+uid);
+        System.out.println("hid is "+hid);
+
+
         tvvalue.setText("作业分值"+value+"分");
         tvprofile.setText(profile);
         tvtitle.setText(title);
@@ -98,6 +103,7 @@ public class Student_homework_answer_going extends Activity {
 
     public void initUI(String json){
         try {
+            System.out.println("---------------json is "+json);
             JSONArray jsonArray = new JSONArray(json);
             JSONObject obj = jsonArray.getJSONObject(0);
             answer = obj.getString("answer");
